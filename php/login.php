@@ -2,7 +2,7 @@
 session_start();
 include '../config/connect.php';
 
-if (isset($_SESSION['user_id'])) {
+/*if (isset($_SESSION['user_id'])) {
     // Redirect based on role
     if ($_SESSION['role'] === 'admin') {
         header("Location: ../admin/dashboard.php");
@@ -13,7 +13,7 @@ if (isset($_SESSION['user_id'])) {
     }
     exit();
 }
-
+*/
 ?>
 
 <!DOCTYPE html>
