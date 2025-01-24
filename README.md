@@ -1,2 +1,2 @@
-# EMS
-Repository for modified version of ems
+# Event-Management-System
+project

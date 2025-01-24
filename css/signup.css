@@ -1,0 +1,105 @@
+/* Global styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'DM Sans', sans-serif;
+    background-color: #f4f4f4;
+}
+
+/* Registration form container */
+.register {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #eef1f7;
+}
+
+/* Parent wrapper for the form */
+.registration-parent {
+    background-color: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    width: 400px;
+}
+
+/* Form heading */
+.registration {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+    font-weight: 500;
+}
+
+/* Input fields and labels */
+.input-parent {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.input-parent label {
+    margin-bottom: 5px;
+    color: #555;
+    font-size: 14px;
+}
+
+.input-parent input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: border-color 0.3s;
+}
+
+.input-parent input:focus {
+    border-color:#2e236c;
+    outline: none;
+}
+
+.input-parent select {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: border-color 0.3s;
+    appearance: none; 
+    background-color: white;
+    color: #555;
+}
+
+.input-parent select:focus {
+    border-color: #2e236c;
+    outline: none;
+}
+
+#signUp-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #2e236c;
+    color: white;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+
+#signUp-btn:hover {
+    background-color: #2e236c;
+}
+
+#error-message {
+    text-align: center;
+    font-weight: 500;
+}
+
+/* Responsive design */
+@media (max-width: 500px) {
+    .registration-parent {
+        width: 90%;
+    }
+}
