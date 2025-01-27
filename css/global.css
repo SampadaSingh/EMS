@@ -7,15 +7,12 @@ body {
 
 :root {
     
-    /* fonts */
     --font-dm-sans: 'DM Sans';
     
-    /* font sizes */
     --font-size-xs: 12px;
     --font-size-base: 16px;
     --font-size-smi: 13px;
     
-    /* Colors */
     --color-white: #fff;
     --color-lightpurple: #433D8B;
     --color-midnightblue: #2e236c;

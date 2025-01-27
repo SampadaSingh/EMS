@@ -1,19 +1,6 @@
 <?php
 session_start();
 include '../config/connect.php';
-
-/*if (isset($_SESSION['user_id'])) {
-    // Redirect based on role
-    if ($_SESSION['role'] === 'admin') {
-        header("Location: ../admin/dashboard.php");
-    } elseif ($_SESSION['role'] === 'organizer') {
-        header("Location: ../organizer/dashboard.php");
-    } else {
-        header("Location: dashboard.php");
-    }
-    exit();
-}
-*/
 ?>
 
 <!DOCTYPE html>
@@ -47,20 +34,19 @@ include '../config/connect.php';
                 $_SESSION['email'] = $user_email;
                 $_SESSION['role'] = $user['role'];
 
-                // Redirect based on user role
                 if ($user['role'] === 'admin') {
-                    header('Location: ../admin/dashboard.php');
+                    header("Location: ../admin/dashboard.php");
                 } elseif ($user['role'] === 'organizer') {
-                    header('Location: ../organizer/dashboard.php');
+                    header("Location: ../organizer/dashboard.php");
                 } else {
-                    header('Location: ../participant/dashboard.php');
+                    header("Location: ../participant/dashboard.php");
                 }
                 exit();
             } else {
-                echo "<script>alert('Incorrect email or password.');</script>";
+                $error = "Invalid password";
             }
         } else {
-            echo "<script>alert('User not found.');</script>";
+            $error = "Email not found";
         }
     }
     ?>

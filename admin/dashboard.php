@@ -233,7 +233,6 @@ $totalOrganizers = $organizerResult->fetch_assoc()['total_organizers'];
             <h2>Recent Activities</h2>
             <div class="activity-list">
                 <?php
-                // Fetch recent events
                 $recentEvents = $conn->query("SELECT * FROM events ORDER BY created_at DESC LIMIT 5");
                 while ($event = $recentEvents->fetch_assoc()) {
                     echo "<div class='activity-item'>";
@@ -247,9 +246,7 @@ $totalOrganizers = $organizerResult->fetch_assoc()['total_organizers'];
     </div>
 
     <script>
-        // Add any JavaScript functionality here
         document.addEventListener('DOMContentLoaded', function() {
-            // Highlight current menu item
             const currentPath = window.location.pathname;
             const menuItems = document.querySelectorAll('.menu-item');
             menuItems.forEach(item => {
