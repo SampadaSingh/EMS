@@ -2,7 +2,6 @@
 include '../config/connect.php';
 session_start();
 
-// Check if user is logged in and is a participant
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'participant') {
     header('Location: ../php/login.php');
     exit();
@@ -11,23 +10,19 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'participant') {
 $participant_id = $_SESSION['user_id'];
 $participant_email = $_SESSION['email'];
 
-// Get filters
 $search = $_GET['search'] ?? '';
-$status = $_GET['status'] ?? 'upcoming'; // Default to upcoming events
+$status = $_GET['status'] ?? 'upcoming'; 
 
-// Get success/error messages
 $success = $_GET['success'] ?? '';
 $error = $_GET['error'] ?? '';
 
-// Base query
 $query = "SELECT e.*, p.created_at as registration_date 
           FROM events e 
-          JOIN participants p ON e.event_title = p.event_title 
+          JOIN participants p ON e.id = p.event_id 
           WHERE p.p_email = ?";
 $params = [$participant_email];
 $types = "s";
 
-// Add search filter
 if ($search) {
     $query .= " AND (e.event_title LIKE ? OR e.event_description LIKE ? OR e.event_venue LIKE ?)";
     $search_param = "%$search%";
@@ -35,7 +30,6 @@ if ($search) {
     $types .= "sss";
 }
 
-// Add status filter
 switch ($status) {
     case 'upcoming':
         $query .= " AND e.start_date >= CURDATE()";
@@ -454,7 +448,6 @@ $result = $stmt->get_result();
     </div>
 
     <script>
-        // Add event listeners for filters
         document.getElementById('search').addEventListener('input', function() {
             updateFilters();
         });
@@ -467,12 +460,10 @@ $result = $stmt->get_result();
             const search = document.getElementById('search').value;
             const status = document.getElementById('status').value;
             
-            // Build the URL with the filter parameters
             let url = window.location.pathname + '?';
             if (search) url += 'search=' + encodeURIComponent(search) + '&';
             if (status) url += 'status=' + encodeURIComponent(status);
             
-            // Redirect to the filtered URL
             window.location.href = url;
         }
 

@@ -2,7 +2,6 @@
 include '../config/connect.php';
 session_start();
 
-// Check if user is logged in and is an organizer
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'organizer') {
     header('Location: ../php/login.php');
     exit();
@@ -10,12 +9,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'organizer') {
 
 $organizer_id = $_SESSION['user_id'];
 
-// Get all events for this organizer
-$query = "SELECT e.*, 
-          (SELECT COUNT(*) FROM participants p WHERE p.event_title = e.event_title) as participant_count 
-          FROM events e 
-          WHERE e.organizer_id = ? 
-          ORDER BY e.start_date DESC";
+$query = "SELECT * FROM events WHERE organizer_id = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $organizer_id);
 $stmt->execute();

@@ -2,7 +2,6 @@
 include '../config/connect.php';
 session_start();
 
-// Check if user is logged in and is an organizer
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'organizer') {
     header('Location: ../php/login.php');
     exit();
@@ -26,25 +25,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $event_description = $_POST['event_description'] ?? '';
     $event_image = $_FILES['event_image'] ?? null;
 
-    // Validate inputs
-    if (empty($event_title) || empty($event_venue) || empty($event_location) || 
-        empty($start_time) || empty($end_time) || empty($start_date) || empty($end_date) || 
-        empty($event_fee) || empty($organizer_name) || empty($organizer_contact) || 
-        empty($event_description)) {
+    if (
+        empty($event_title) || empty($event_venue) || empty($event_location) ||
+        empty($start_time) || empty($end_time) || empty($start_date) || empty($end_date) ||
+        empty($event_fee) || empty($organizer_name) || empty($organizer_contact) ||
+        empty($event_description)
+    ) {
         $error_message = "All fields are required.";
     } else {
-        // Handle file upload
         $image_path = '';
         if ($event_image && $event_image['error'] === UPLOAD_ERR_OK) {
             $allowed_types = ['image/jpeg', 'image/png', 'image/jpg'];
             $file_type = $event_image['type'];
-            
+
             if (!in_array($file_type, $allowed_types)) {
                 $error_message = "Only JPG, JPEG & PNG files are allowed.";
             } else {
                 $file_name = uniqid() . '_' . basename($event_image['name']);
                 $upload_path = '../uploads/' . $file_name;
-                
+
                 if (move_uploaded_file($event_image['tmp_name'], $upload_path)) {
                     $image_path = $file_name;
                 } else {
@@ -54,21 +53,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if (empty($error_message)) {
-            // Insert event into database
             $query = "INSERT INTO events (event_title, event_venue, event_location, start_time, end_time, 
                      start_date, end_date, event_fee, organizer_name, organizer_contact, 
                      event_description, event_image, organizer_id, created_at) 
                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
-            
+
             if ($stmt = $conn->prepare($query)) {
-                $stmt->bind_param("sssssssssssssi", $event_title, $event_venue, $event_location, 
-                                $start_time, $end_time, $start_date, $end_date, $event_fee, 
-                                $organizer_name, $organizer_contact, $event_description, 
-                                $image_path, $organizer_id);
-                
+                $stmt->bind_param(
+                    "sssssssssssssi",
+                    $event_title,
+                    $event_venue,
+                    $event_location,
+                    $start_time,
+                    $end_time,
+                    $start_date,
+                    $end_date,
+                    $event_fee,
+                    $organizer_name,
+                    $organizer_contact,
+                    $event_description,
+                    $image_path,
+                    $organizer_id
+                );
+
                 if ($stmt->execute()) {
                     $success_message = "Event created successfully!";
-                    // Redirect to events page after successful creation
                     header("Location: events.php");
                     exit();
                 } else {
@@ -85,6 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -118,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background: white;
             padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .form-section {
@@ -204,6 +214,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     </style>
 </head>
+
 <body>
     <div class="content">
         <div class="header">
@@ -285,4 +296,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
     </div>
 </body>
+
 </html>
