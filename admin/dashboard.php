@@ -256,6 +256,17 @@ $totalOrganizers = $organizerResult->fetch_assoc()['total_organizers'];
                 }
             });
         });
+
+        function updateCalendar() {
+            const options = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            };
+            const today = new Date().toLocaleDateString('en-US', options);
+            document.getElementById('currentDate').innerText = today;
+        }
+        updateCalendar();
     </script>
 </body>
 </html>

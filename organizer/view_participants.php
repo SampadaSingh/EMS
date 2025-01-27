@@ -1,6 +1,6 @@
 <?php
-include '../config/connect.php';
 session_start();
+include '../config/connect.php';
 
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'organizer') {
     header('Location: ../php/login.php');
@@ -8,7 +8,8 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'organizer') {
 }
 
 $organizer_id = $_SESSION['user_id'];
-$event_id = $_GET['id'] ?? '';
+$event_id = $_GET['event_id']?? '';
+$event_title = $_GET['event_title'] ?? '';
 
 $event_query = "SELECT * FROM events WHERE id = ? AND organizer_id = ?";
 $event_stmt = $conn->prepare($event_query);
@@ -17,7 +18,7 @@ $event_stmt->execute();
 $event_result = $event_stmt->get_result();
 
 if ($event_result->num_rows === 0) {
-    header('Location: events.php');
+    echo "No event found for this ID and Organizer.<br>";
     exit();
 }
 
@@ -31,7 +32,14 @@ $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $event_id);
 $stmt->execute();
 $result = $stmt->get_result();
+
+if ($result->num_rows === 0) {
+    echo "No participants found for this Event ID.<br>";
+    exit();
+}
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -255,46 +263,8 @@ $result = $stmt->get_result();
     </style>
 </head>
 <body>
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <h2>EMS</h2>
-        <div class="menu-item">
-            <a href="dashboard.php">
-                <i class="fas fa-tachometer-alt"></i>
-                <span>Dashboard</span>
-            </a>
-        </div>
-        <div class="menu-item">
-            <a href="events.php">
-                <i class="fas fa-calendar-alt"></i>
-                <span>My Events</span>
-            </a>
-        </div>
-        <div class="menu-item">
-            <a href="participants.php">
-                <i class="fas fa-users"></i>
-                <span>Participants</span>
-            </a>
-        </div>
-        <div class="menu-item">
-            <a href="account.php">
-                <i class="fas fa-user"></i>
-                <span>My Account</span>
-            </a>
-        </div>
-        <div class="menu-item">
-            <a href="../php/logout.php">
-                <i class="fas fa-sign-out-alt"></i>
-                <span>Log Out</span>
-            </a>
-        </div>
-        <div class="calendar">
-            <h3>Calendar</h3>
-            <p id="currentDate"></p>
-        </div>
-    </div>
+    <?php include 'sidebar.php'; ?>
 
-    <!-- Main Content -->
     <div class="content">
         <div class="header">
             <h1>Event Participants</h1>
@@ -371,17 +341,5 @@ $result = $stmt->get_result();
         </div>
     </div>
     
-    <script>
-    function updateCalendar() {
-            const options = {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            };
-            const today = new Date().toLocaleDateString('en-US', options);
-            document.getElementById('currentDate').innerText = today;
-        }
-        updateCalendar();
-    </script>
 </body>
 </html> 

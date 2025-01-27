@@ -241,44 +241,7 @@ $result = $stmt->get_result();
     </style>
 </head>
 <body>
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <h2>EMS</h2>
-        <div class="menu-item">
-            <a href="dashboard.php">
-                <i class="fas fa-tachometer-alt"></i>
-                <span>Dashboard</span>
-            </a>
-        </div>
-        <div class="menu-item">
-            <a href="events.php">
-                <i class="fas fa-calendar-alt"></i>
-                <span>My Events</span>
-            </a>
-        </div>
-        <div class="menu-item">
-            <a href="participants.php">
-                <i class="fas fa-users"></i>
-                <span>Participants</span>
-            </a>
-        </div>
-        <div class="menu-item">
-            <a href="account.php">
-                <i class="fas fa-user"></i>
-                <span>My Account</span>
-            </a>
-        </div>
-        <div class="menu-item">
-            <a href="../php/logout.php">
-                <i class="fas fa-sign-out-alt"></i>
-                <span>Log Out</span>
-            </a>
-        </div>
-        <div class="calendar">
-            <h3>Calendar</h3>
-            <p id="currentDate"></p>
-        </div>
-    </div>
+    <?php include 'sidebar.php'; ?>
 
     <!-- Main Content -->
     <div class="content">
@@ -314,9 +277,9 @@ $result = $stmt->get_result();
                         </div>
                         
                         <div class="event-actions">
-                            <a href="view_participants.php?event_title=<?php echo urlencode($event['event_title']); ?>" class="action-btn view-btn">View Participants</a>
+                            <a href="view_participants.php?event_id=<?php echo urlencode($event['id']); ?>&event_title=<?php echo urlencode($event['event_title']); ?>" class="action-btn view-btn">View Participants</a>
                             <a href="edit_event.php?id=<?php echo urlencode($event['id']); ?>" class="action-btn edit-btn">Edit</a>
-                            <a href="export_participants.php?event=<?php echo urlencode($event['event_title']); ?>" class="action-btn delete-btn">Delete</a>
+                            <a href="export_participants.php?event_id=<?php echo urlencode($event['id']); ?>" class="action-btn delete-btn">Delete</a>
                         </div>
                     </div>
                 <?php endwhile; ?>

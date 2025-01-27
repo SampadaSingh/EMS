@@ -2,13 +2,11 @@
 session_start();
 include '../config/connect.php';
 
-// Check if user is logged in and is admin
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     header('Location: ../index.php');
     exit();
 }
 
-// Get user ID from URL
 if (!isset($_GET['id'])) {
     header('Location: users.php');
     exit();
@@ -16,7 +14,6 @@ if (!isset($_GET['id'])) {
 
 $userId = $conn->real_escape_string($_GET['id']);
 
-// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $conn->real_escape_string($_POST['username']);
     $email = $conn->real_escape_string($_POST['email']);
@@ -24,7 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $sql = "UPDATE users SET username = '$username', email = '$email', role = '$role'";
     
-    // Only update password if a new one is provided
     if (!empty($_POST['password'])) {
         $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
         $sql .= ", password = '$password'";
@@ -40,7 +36,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Get user data
 $result = $conn->query("SELECT * FROM users WHERE id = '$userId'");
 if ($result->num_rows === 0) {
     header('Location: users.php');
