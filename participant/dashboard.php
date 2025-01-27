@@ -208,11 +208,11 @@ $upcoming_result = $conn->query($upcoming_query);
             list-style: none;
         }
 
-        .menu-item {
+        .nav-item {
             margin-bottom: 15px;
         }
 
-        .menu-link {
+        .nav-link {
             display: flex;
             align-items: center;
             color: white;
@@ -222,20 +222,21 @@ $upcoming_result = $conn->query($upcoming_query);
             transition: background-color 0.3s;
         }
 
-        .menu-link:hover {
+        .nav-link:hover {
             background-color: rgba(255, 255, 255, 0.1);
         }
 
-        .menu-link i {
+        .nav-link i {
             margin-right: 10px;
             width: 20px;
         }
 
         .calendar {
-            margin-top: 40px;
+            margin-top: 270px;
             padding: 20px;
             background-color: #2a2679;
             border-radius: 10px;
+            text-align: center;
         }
 
         .calendar h3 {

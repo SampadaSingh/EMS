@@ -2,7 +2,6 @@
 include '../config/connect.php';
 session_start();
 
-// Check if user is logged in and is an organizer
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'organizer') {
     header('Location: ../php/login.php');
     exit();
@@ -10,7 +9,6 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'organizer') {
 
 $organizer_id = $_SESSION['user_id'];
 
-// Get user's name
 $user_query = "SELECT full_name FROM users WHERE id = ?";
 $user_stmt = $conn->prepare($user_query);
 $user_stmt->bind_param("i", $organizer_id);
@@ -18,7 +16,6 @@ $user_stmt->execute();
 $user_result = $user_stmt->get_result();
 $user = $user_result->fetch_assoc();
 
-// Get total events count
 $events_query = "SELECT COUNT(*) as total_events FROM events WHERE organizer_id = ?";
 $events_stmt = $conn->prepare($events_query);
 $events_stmt->bind_param("i", $organizer_id);
@@ -26,7 +23,6 @@ $events_stmt->execute();
 $events_result = $events_stmt->get_result();
 $total_events = $events_result->fetch_assoc()['total_events'];
 
-// Get total participants count
 $participants_query = "SELECT COUNT(DISTINCT p.id) as total_participants 
                       FROM participants p 
                       JOIN events e ON p.event_title = e.event_title 
@@ -37,7 +33,6 @@ $participants_stmt->execute();
 $participants_result = $participants_stmt->get_result();
 $total_participants = $participants_result->fetch_assoc()['total_participants'];
 
-// Get upcoming events
 $upcoming_query = "SELECT * FROM events 
                   WHERE organizer_id = ? 
                   AND start_date >= CURDATE() 
@@ -110,10 +105,11 @@ $upcoming_result = $upcoming_stmt->get_result();
         }
 
         .calendar {
-            margin-top: 40px;
+            margin-top: 270px;
             padding: 20px;
             background-color: #2a2679;
             border-radius: 10px;
+            text-align: center;
         }
 
         .calendar h3 {
@@ -214,8 +210,6 @@ $upcoming_result = $upcoming_stmt->get_result();
     </style>
 </head>
 <body>
-    <!-- Sidebar -->
-    <!-- Sidebar -->
     <div class="sidebar">
         <h2>EMS</h2>
         <div class="menu-item">
@@ -254,8 +248,6 @@ $upcoming_result = $upcoming_stmt->get_result();
         </div>
     </div>
 
-
-    <!-- Main Content -->
     <div class="content">
         <div class="header">
             <h1>Welcome, <?php echo htmlspecialchars($user['full_name']); ?></h1>

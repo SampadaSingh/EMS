@@ -2,13 +2,11 @@
 session_start();
 include '../config/connect.php';
 
-// Check if user is logged in and is admin
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     header('Location: ../index.php');
     exit();
 }
 
-// Fetch statistics
 $participantResult = $conn->query("SELECT COUNT(*) AS total_participants FROM participants");
 $totalParticipants = $participantResult->fetch_assoc()['total_participants'];
 
@@ -167,11 +165,11 @@ $totalOrganizers = $organizerResult->fetch_assoc()['total_organizers'];
         }
 
         .calendar {
-            margin-top: 30px;
-            padding: 15px;
-            background-color: #34495e;
-            border-radius: 5px;
-            color: white;
+            margin-top: 270px;
+            padding: 20px;
+            background-color: #2a2679;
+            border-radius: 10px;
+            text-align: center;
         }
 
         .calendar h3 {
@@ -246,6 +244,17 @@ $totalOrganizers = $organizerResult->fetch_assoc()['total_organizers'];
     </div>
 
     <script>
+         function updateCalendar() {
+            const options = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            };
+            const today = new Date().toLocaleDateString('en-US', options);
+            document.getElementById('currentDate').innerText = today;
+        }
+        updateCalendar();
+
         document.addEventListener('DOMContentLoaded', function() {
             const currentPath = window.location.pathname;
             const menuItems = document.querySelectorAll('.menu-item');
@@ -256,17 +265,6 @@ $totalOrganizers = $organizerResult->fetch_assoc()['total_organizers'];
                 }
             });
         });
-
-        function updateCalendar() {
-            const options = {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            };
-            const today = new Date().toLocaleDateString('en-US', options);
-            document.getElementById('currentDate').innerText = today;
-        }
-        updateCalendar();
     </script>
 </body>
 </html>
