@@ -8,7 +8,6 @@ include '../config/connect.php';
 //     exit();
 // }
 
-// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = $conn->real_escape_string($_POST['event_title']);
     $venue = $conn->real_escape_string($_POST['event_venue']);
