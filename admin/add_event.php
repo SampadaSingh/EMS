@@ -8,7 +8,6 @@ include '../config/connect.php';
 //     exit();
 // }
 
-// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = $conn->real_escape_string($_POST['event_title']);
     $venue = $conn->real_escape_string($_POST['event_venue']);
@@ -65,7 +64,7 @@ $organizers = $conn->query("SELECT id, full_name FROM users WHERE role = 'organi
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Event - Admin</title>
     <style>
-        * {
+       * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -80,7 +79,7 @@ $organizers = $conn->query("SELECT id, full_name FROM users WHERE role = 'organi
         .sidebar {
             width: 250px;
             height: 100vh;
-            background-color: #2c3e50;
+            background-color: #17153B;
             padding: 20px;
             position: fixed;
         }
@@ -102,11 +101,11 @@ $organizers = $conn->query("SELECT id, full_name FROM users WHERE role = 'organi
         }
 
         .menu-item:hover {
-            background-color: #34495e;
+            background-color: rgb(75, 64, 141);
         }
 
         .menu-item.active {
-            background-color: #3498db;
+            background-color: rgb(81, 64, 179);
         }
 
         .menu-item img {
@@ -181,7 +180,7 @@ $organizers = $conn->query("SELECT id, full_name FROM users WHERE role = 'organi
 
         .submit-btn {
             padding: 10px 20px;
-            background-color: #2ecc71;
+            background-color: rgb(81, 64, 179);
             color: white;
             border: none;
             border-radius: 5px;
@@ -191,7 +190,7 @@ $organizers = $conn->query("SELECT id, full_name FROM users WHERE role = 'organi
         }
 
         .submit-btn:hover {
-            background-color: #27ae60;
+            background-color: rgb(75, 64, 141);
         }
 
         .cancel-btn {

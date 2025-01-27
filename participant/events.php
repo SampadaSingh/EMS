@@ -121,8 +121,12 @@ $result = $stmt->get_result();
             transition: background-color 0.3s;
         }
 
-        .nav-link:hover, .nav-link.active {
-            background-color: rgba(255, 255, 255, 0.1);
+        .nav-link:hover{
+            background-color: rgb(75, 64, 141);
+        }
+        
+        .nav-link.active {
+            background-color: rgb(81, 64, 179);
         }
 
         .nav-link i {
@@ -133,7 +137,7 @@ $result = $stmt->get_result();
         .calendar {
             margin-top: 40px;
             padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
+            background: #2a2679;
             border-radius: 10px;
         }
 
@@ -193,7 +197,7 @@ $result = $stmt->get_result();
 
         .filter-btn {
             padding: 10px 20px;
-            background: #17153B;
+            background: rgb(81, 64, 179);;
             color: white;
             border: none;
             border-radius: 5px;

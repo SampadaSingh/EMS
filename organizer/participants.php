@@ -103,10 +103,15 @@ $events_result = $events_stmt->get_result();
     transition: background 0.3s;
 }
 
-.menu-item:hover {
-    background: rgba(255, 255, 255, 0.1);
-}
 
+.menu-item:hover {
+            background-color: rgb(75, 64, 141);
+        }
+
+        .menu-item.active {
+            background-color: rgb(81, 64, 179);
+        }
+        
 .menu-item img {
     width: 24px;
     height: 24px;
@@ -121,7 +126,7 @@ $events_result = $events_stmt->get_result();
         .calendar {
             margin-top: 40px;
             padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
+            background-color: #2a2679;
             border-radius: 10px;
         }
 
