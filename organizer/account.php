@@ -174,9 +174,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .menu-item:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background-color: rgb(75, 64, 141);
         }
 
+        .menu-item.active {
+            background-color: rgb(81, 64, 179);
+        }
+        
         .menu-item img {
             width: 24px;
             height: 24px;
@@ -197,7 +201,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .calendar {
             margin-top: 40px;
             padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
+            background-color: #2a2679;
             border-radius: 10px;
         }
 

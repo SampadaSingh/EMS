@@ -93,11 +93,11 @@ $user = $result->fetch_assoc();
         }
 
         .menu-item:hover {
-            background-color: #34495e;
+            background-color: rgb(75, 64, 141);
         }
 
         .menu-item.active {
-            background-color: #3498db;
+            background-color: rgb(81, 64, 179);
         }
 
         .menu-item img {
@@ -176,7 +176,7 @@ $user = $result->fetch_assoc();
 
         .submit-btn {
             padding: 10px 20px;
-            background-color: #2ecc71;
+            background-color: rgb(81, 64, 179);
             color: white;
             border: none;
             border-radius: 5px;
@@ -186,7 +186,7 @@ $user = $result->fetch_assoc();
         }
 
         .submit-btn:hover {
-            background-color: #27ae60;
+            background-color: rgb(75, 64, 141);;
         }
 
         .cancel-btn {

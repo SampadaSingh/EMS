@@ -112,7 +112,7 @@ $upcoming_result = $upcoming_stmt->get_result();
         .calendar {
             margin-top: 40px;
             padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
+            background-color: #2a2679;
             border-radius: 10px;
         }
 

@@ -77,11 +77,11 @@ $users = $conn->query("SELECT * FROM users ORDER BY created_at DESC");
         }
 
         .menu-item:hover {
-            background-color: #34495e;
+            background-color: rgb(75, 64, 141);
         }
 
         .menu-item.active {
-            background-color: #3498db;
+            background-color: rgb(81, 64, 179);
         }
 
         .menu-item img {
@@ -160,13 +160,13 @@ $users = $conn->query("SELECT * FROM users ORDER BY created_at DESC");
         }
 
         .edit-btn {
-            background-color: #3498db;
+            background-color: rgb(81, 64, 179);
             color: white;
             margin-right: 5px;
         }
 
         .edit-btn:hover {
-            background-color: #2980b9;
+            background-color: rgb(75, 64, 141);
         }
 
         .delete-btn {
@@ -206,7 +206,7 @@ $users = $conn->query("SELECT * FROM users ORDER BY created_at DESC");
 
         .add-btn {
             padding: 10px 20px;
-            background-color: #2ecc71;
+            background-color: rgb(81, 64, 179);
             color: white;
             border: none;
             border-radius: 5px;
@@ -217,7 +217,7 @@ $users = $conn->query("SELECT * FROM users ORDER BY created_at DESC");
         }
 
         .add-btn:hover {
-            background-color: #27ae60;
+            background-color: rgb(75, 64, 141);
         }
 
         .action-buttons {

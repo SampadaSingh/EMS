@@ -63,11 +63,11 @@ $totalOrganizers = $organizerResult->fetch_assoc()['total_organizers'];
         }
 
         .menu-item:hover {
-            background-color: #34495e;
+            background-color: rgb(75, 64, 141);
         }
 
         .menu-item.active {
-            background-color: #3498db;
+            background-color: rgb(81, 64, 179);
         }
 
         .menu-item img {

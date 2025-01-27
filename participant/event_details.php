@@ -110,10 +110,14 @@ $total_registrations = $total_stmt->get_result()->fetch_assoc()['total'];
             transition: background-color 0.3s;
         }
 
-        .nav-link:hover, .nav-link.active {
-            background-color: rgba(255, 255, 255, 0.1);
+         .nav-link:hover{
+            background-color: rgb(75, 64, 141);
         }
-
+        
+        .nav-link.active {
+            background-color: rgb(81, 64, 179);
+        }
+        
         .nav-link i {
             margin-right: 10px;
             width: 20px;
@@ -122,7 +126,7 @@ $total_registrations = $total_stmt->get_result()->fetch_assoc()['total'];
         .calendar {
             margin-top: 40px;
             padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
+            background-color: #2a2679;
             border-radius: 10px;
         }
 

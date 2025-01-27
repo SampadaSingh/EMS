@@ -219,31 +219,6 @@ $result = $stmt->get_result();
             color: #666;
         }
 
-        .alert {
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .alert i {
-            font-size: 20px;
-        }
-
-        .alert-success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .alert-error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
         /* Sidebar styles */
         .sidebar {
             width: 250px;
@@ -278,8 +253,12 @@ $result = $stmt->get_result();
             transition: background-color 0.3s;
         }
 
-        .nav-link:hover, .nav-link.active {
-            background-color: rgba(255, 255, 255, 0.1);
+         .nav-link:hover{
+            background-color: rgb(75, 64, 141);
+        }
+        
+        .nav-link.active {
+            background-color: rgb(81, 64, 179);
         }
 
         .nav-link i {
@@ -290,7 +269,7 @@ $result = $stmt->get_result();
         .calendar {
             margin-top: 40px;
             padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
+            background-color: #2a2679;
             border-radius: 10px;
         }
 
