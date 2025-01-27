@@ -41,7 +41,7 @@ $totalOrganizers = $organizerResult->fetch_assoc()['total_organizers'];
         .sidebar {
             width: 250px;
             height: 100vh;
-            background-color: #2c3e50;
+            background-color: #17153B;
             padding: 20px;
             position: fixed;
         }
