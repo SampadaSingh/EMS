@@ -15,6 +15,10 @@ $participant_email = $_SESSION['email'];
 $search = $_GET['search'] ?? '';
 $status = $_GET['status'] ?? 'upcoming'; // Default to upcoming events
 
+// Get success/error messages
+$success = $_GET['success'] ?? '';
+$error = $_GET['error'] ?? '';
+
 // Base query
 $query = "SELECT e.*, p.created_at as registration_date 
           FROM events e 
@@ -215,6 +219,31 @@ $result = $stmt->get_result();
             color: #666;
         }
 
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert i {
+            font-size: 20px;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
         /* Sidebar styles */
         .sidebar {
             width: 250px;
@@ -339,6 +368,20 @@ $result = $stmt->get_result();
                 <div class="header">
                     <h1>My Events</h1>
                 </div>
+
+                <?php if ($success === 'registration_complete'): ?>
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle"></i>
+                        <span>You have successfully registered for the event!</span>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ($error === 'already_registered'): ?>
+                    <div class="alert alert-error">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>You are already registered for this event.</span>
+                    </div>
+                <?php endif; ?>
 
                 <div class="filters">
                     <div class="filter-group">
