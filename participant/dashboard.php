@@ -230,7 +230,7 @@ $upcoming_result = $conn->query($upcoming_query);
                                     <h3><?php echo htmlspecialchars($event['event_title']); ?></h3>
                                     <div class="event-date">Date: <?php echo date('F j, Y', strtotime($event['start_date'])); ?></div>
                                 </div>
-                                <a href="event_details.php?id=<?php echo $event['id']; ?>" class="details-button">Details</a>
+                                <a href="eventDetails.php?id=<?php echo $event['id']; ?>" class="details-button">Details</a>
                             </div>
                         <?php endwhile; ?>
                     </div>
