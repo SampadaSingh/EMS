@@ -307,7 +307,7 @@ if ($result->num_rows === 0) {
         <div class="participants-table">
             <div class="table-header">
                 <h3>Registered Participants</h3>
-                <a href="export_participants.php?event_title=<?php echo urlencode($event_title); ?>" class="export-btn">
+                <a href="export_participants.php?event_id=<?php echo urlencode($event_id); ?>&event_title=<?php echo urlencode($event_title);?>" class="export-btn">
                     Export to Excel
                 </a>
             </div>
