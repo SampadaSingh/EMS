@@ -48,7 +48,7 @@ $check_query->store_result();
 
 if ($check_query->num_rows > 0) {
     echo "<script>alert('You are already registered for this event.');</script>";
-    echo "<script>window.location = 'my_events.php';</script>";
+    echo "<script>window.location = 'myEvents.php';</script>";
 } else {
     $stmt = $conn->prepare("INSERT INTO participants (p_name, p_email, p_phone, event_title, event_id, created_at) 
                             VALUES (?, ?, ?, ?, ?, NOW())");
@@ -57,7 +57,7 @@ if ($check_query->num_rows > 0) {
     if ($stmt->execute()) {
 
         echo "<script>alert('Registration successful!');</script>";
-        echo "<script>window.location = 'my_events.php';</script>";
+        echo "<script>window.location = 'myEvents.php';</script>";
     } else {
         echo "<script>alert('Error during registration. Please try again later.');</script>";
     }

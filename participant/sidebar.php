@@ -109,7 +109,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     </a>
                 </li>
                 <li class="nav-item <?php echo $current_page == 'my_events.php' ? 'active' : ''; ?>">
-                    <a href="my_events.php" class="nav-link">
+                    <a href="myEvents.php" class="nav-link">
                         <i class="fas fa-star"></i>
                         <span>My Events</span>
                     </a>
