@@ -2,13 +2,11 @@
 session_start();
 include '../config/connect.php';
 
-// Check if user is logged in and is admin
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     header('Location: ../index.php');
     exit();
 }
 
-// Handle user actions (delete, update role)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action'])) {
         switch ($_POST['action']) {
@@ -29,8 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Fetch all users
-$users = $conn->query("SELECT * FROM users ORDER BY created_at DESC");
+$users = $conn->query("SELECT * FROM users ORDER BY id ASC");
 ?>
 
 <!DOCTYPE html>
@@ -104,6 +101,7 @@ $users = $conn->query("SELECT * FROM users ORDER BY created_at DESC");
             background-color: rgb(81, 64, 179);
             color: white;
             margin-right: 5px;
+            text-decoration: none;
         }
 
         .edit-btn:hover {
