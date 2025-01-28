@@ -2,7 +2,7 @@
 session_start();
 include '../config/connect.php';
 
-$result = $conn->query("SELECT * FROM events ORDER BY start_date DESC");
+$result = $conn->query("SELECT * FROM events ORDER BY id ASC");
 $events = $result;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -181,7 +181,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .description-cell {
-            max-width: 300px;
+            max-width: 200px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
