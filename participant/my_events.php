@@ -2,6 +2,7 @@
 include '../config/connect.php';
 session_start();
 
+// Check if user is logged in and is a participant
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'participant') {
     header('Location: ../php/login.php');
     exit();
@@ -10,19 +11,19 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'participant') {
 $participant_id = $_SESSION['user_id'];
 $participant_email = $_SESSION['email'];
 
+// Get filters
 $search = $_GET['search'] ?? '';
-$status = $_GET['status'] ?? 'upcoming'; 
+$status = $_GET['status'] ?? 'upcoming'; // Default to upcoming events
 
-$success = $_GET['success'] ?? '';
-$error = $_GET['error'] ?? '';
-
+// Base query
 $query = "SELECT e.*, p.created_at as registration_date 
           FROM events e 
-          JOIN participants p ON e.id = p.event_id 
+          JOIN participants p ON e.event_title = p.event_title 
           WHERE p.p_email = ?";
 $params = [$participant_email];
 $types = "s";
 
+// Add search filter
 if ($search) {
     $query .= " AND (e.event_title LIKE ? OR e.event_description LIKE ? OR e.event_venue LIKE ?)";
     $search_param = "%$search%";
@@ -30,6 +31,7 @@ if ($search) {
     $types .= "sss";
 }
 
+// Add status filter
 switch ($status) {
     case 'upcoming':
         $query .= " AND e.start_date >= CURDATE()";
@@ -60,17 +62,6 @@ $result = $stmt->get_result();
     <title>My Events - EMS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
-        }
-
-        body {
-            background-color: #f5f5f5;
-        }
-
         .dashboard-layout {
             display: flex;
             min-height: 100vh;
@@ -213,71 +204,6 @@ $result = $stmt->get_result();
             color: #666;
         }
 
-        /* Sidebar styles */
-        .sidebar {
-            width: 250px;
-            background-color: #17153B;
-            color: white;
-            position: fixed;
-            height: 100vh;
-            padding: 20px;
-        }
-
-        .logo {
-            font-size: 24px;
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .nav-links {
-            list-style: none;
-        }
-
-        .nav-item {
-            margin-bottom: 15px;
-        }
-
-        .nav-link {
-            display: flex;
-            align-items: center;
-            color: white;
-            text-decoration: none;
-            padding: 10px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-
-         .nav-link:hover{
-            background-color: rgb(75, 64, 141);
-        }
-        
-        .nav-link.active {
-            background-color: rgb(81, 64, 179);
-        }
-
-        .nav-link i {
-            margin-right: 10px;
-            width: 20px;
-        }
-
-        .calendar {
-            margin-top: 40px;
-            padding: 20px;
-            background-color: #2a2679;
-            border-radius: 10px;
-        }
-
-        .calendar h3 {
-            margin-bottom: 10px;
-            font-size: 18px;
-            color: white;
-        }
-
-        .calendar p {
-            color: #ddd;
-            font-size: 14px;
-        }
-
         @media (max-width: 768px) {
             .sidebar {
                 width: 200px;
@@ -296,65 +222,14 @@ $result = $stmt->get_result();
 </head>
 <body>
     <div class="dashboard-layout">
-        <div class="sidebar">
-            <div class="logo">EMS</div>
-            <ul class="nav-links">
-                <li class="nav-item">
-                    <a href="dashboard.php" class="nav-link">
-                        <i class="fas fa-tachometer-alt"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="events.php" class="nav-link">
-                        <i class="fas fa-calendar-alt"></i>
-                        <span>Events</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="my_events.php" class="nav-link active">
-                        <i class="fas fa-star"></i>
-                        <span>My Events</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="account.php" class="nav-link">
-                        <i class="fas fa-user"></i>
-                        <span>My Account</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="../php/logout.php" class="nav-link">
-                        <i class="fas fa-sign-out-alt"></i>
-                        <span>Log Out</span>
-                    </a>
-                </li>
-            </ul>
-            <div class="calendar">
-                <h3>Calendar</h3>
-                <p id="currentDate"></p>
-            </div>
-        </div>
+        
+        <?php include 'sidebar.php'; ?>
 
         <div class="main-content">
             <div class="container">
                 <div class="header">
                     <h1>My Events</h1>
                 </div>
-
-                <?php if ($success === 'registration_complete'): ?>
-                    <div class="alert alert-success">
-                        <i class="fas fa-check-circle"></i>
-                        <span>You have successfully registered for the event!</span>
-                    </div>
-                <?php endif; ?>
-
-                <?php if ($error === 'already_registered'): ?>
-                    <div class="alert alert-error">
-                        <i class="fas fa-exclamation-circle"></i>
-                        <span>You are already registered for this event.</span>
-                    </div>
-                <?php endif; ?>
 
                 <div class="filters">
                     <div class="filter-group">
@@ -427,6 +302,7 @@ $result = $stmt->get_result();
     </div>
 
     <script>
+        // Add event listeners for filters
         document.getElementById('search').addEventListener('input', function() {
             updateFilters();
         });
@@ -439,23 +315,14 @@ $result = $stmt->get_result();
             const search = document.getElementById('search').value;
             const status = document.getElementById('status').value;
             
+            // Build the URL with the filter parameters
             let url = window.location.pathname + '?';
             if (search) url += 'search=' + encodeURIComponent(search) + '&';
             if (status) url += 'status=' + encodeURIComponent(status);
             
+            // Redirect to the filtered URL
             window.location.href = url;
         }
-
-        function updateCalendar() {
-            const options = { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-            };
-            const today = new Date().toLocaleDateString('en-US', options);
-            document.getElementById('currentDate').innerText = today;
-        }
-        updateCalendar();
     </script>
 </body>
 </html>

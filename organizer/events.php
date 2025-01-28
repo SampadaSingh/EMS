@@ -26,73 +26,6 @@ $result = $stmt->get_result();
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background-color: #f5f7fa;
-            display: flex;
-            min-height: 100vh;
-        }
-
- 
-        .sidebar {
-            width: 270px;
-            background-color: #17153B;
-            color: white;
-            padding: 30px 20px;
-            position: fixed;
-            height: 100vh;
-        }
-
-        .sidebar h2 {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .menu-item {
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            border-radius: 5px;
-            transition: background 0.3s;
-        }
-
-        .menu-item:hover {
-            background-color: rgb(75, 64, 141);
-        }
-
-        .menu-item.active {
-            background-color: rgb(81, 64, 179);
-        }
-
-        .menu-item img {
-            width: 24px;
-            height: 24px;
-            margin-right: 15px;
-        }
-
-        .menu-item a {
-            color: white;
-            text-decoration: none;
-        }
-
-        .calendar {
-            margin-top: 40px;
-            padding: 20px;
-            background-color: #2a2679;
-            border-radius: 10px;
-        }
-
-        .calendar h3 {
-            margin-bottom: 10px;
-        }
-        
         .content {
             flex-grow: 1;
             margin-left: 300px;
@@ -294,17 +227,5 @@ $result = $stmt->get_result();
             <?php endif; ?>
         </div>
     </div>
-    <script>
-        function updateCalendar() {
-            const options = {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            };
-            const today = new Date().toLocaleDateString('en-US', options);
-            document.getElementById('currentDate').innerText = today;
-        }
-        updateCalendar();
-    </script>
 </body>
 </html>

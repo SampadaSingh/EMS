@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event Management Dashboard</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -16,34 +15,33 @@
 
         body {
             display: flex;
-            min-height: 100vh;
-            background-color: #f5f7fa;
+            background-color: #f5f6fa;
         }
 
         .sidebar {
-            width: 270px;
-            background-color: #17153B;
-            color: white;
-            padding: 30px 20px;
-            position: fixed;
+            width: 250px;
             height: 100vh;
+            background-color: #17153B;
+            padding: 20px;
+            position: fixed;
         }
 
         .sidebar h2 {
+            color: white;
+            margin-bottom: 30px;
             text-align: center;
-            margin-bottom: 40px;
         }
 
         .menu-item {
-            margin-bottom: 20px;
             display: flex;
             align-items: center;
-            padding: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
             border-radius: 5px;
-            transition: background 0.3s;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
 
- 
         .menu-item:hover {
             background-color: rgb(75, 64, 141);
         }
@@ -51,20 +49,21 @@
         .menu-item.active {
             background-color: rgb(81, 64, 179);
         }
-        
 
         .menu-item img {
-            width: 24px;
-            height: 24px;
-            margin-right: 15px;
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+
+        .menu-item span {
+            color: white;
         }
 
         .menu-item a {
             color: white;
             text-decoration: none;
         }
-
-
         .calendar {
             margin-top: 230px;
             padding: 20px;
@@ -91,50 +90,45 @@
 </style>
 </head>
 <body>
-
 <div class="sidebar">
-        <h2>EMS</h2>
+        <h2>Admin Panel</h2>
         <?php
 $current_page = basename($_SERVER['PHP_SELF']);
 ?>
         <div class="menu-item <?php echo $current_page == 'dashboard.php' ? 'active' : ''; ?>">
-            <a href="dashboard.php">
-                <i class="fas fa-tachometer-alt"></i>
-                <span>Dashboard</span>
-            </a>
+            <img src="https://img.icons8.com/ios-glyphs/30/ffffff/dashboard.png" alt="Dashboard">
+            <span><a href="dashboard.php">Dashboard</a></span>
+        </div>
+        <div class="menu-item <?php echo $current_page == 'users.php' ? 'active' : ''; ?>">
+            <img src="https://img.icons8.com/ios-glyphs/30/ffffff/conference.png" alt="Users">
+            <span><a href="users.php">Manage Users</a></span>
         </div>
         <div class="menu-item <?php echo $current_page == 'events.php' ? 'active' : ''; ?>">
-            <a href="events.php">
-                <i class="fas fa-calendar-alt"></i>
-                <span>My Events</span>
-            </a>
+            <img src="https://img.icons8.com/ios-glyphs/30/ffffff/calendar.png" alt="Events">
+            <span><a href="events.php">Manage Events</a></span>
         </div>
-        <div class="menu-item <?php echo $current_page == 'participants.php' ? 'active' : ''; ?>">
-            <a href="participants.php">
-                <i class="fas fa-users"></i>
-                <span>Participants</span>
-            </a>
+        <div class="menu-item <?php echo $current_page == 'reports.php' ? 'active' : ''; ?>">
+            <img src="https://img.icons8.com/ios-glyphs/30/ffffff/report-card.png" alt="Reports">
+            <span><a href="reports.php">Reports</a></span>
         </div>
-        <div class="menu-item <?php echo $current_page == 'account.php' ? 'active' : ''; ?>">
-            <a href="account.php">
-                <i class="fas fa-user"></i>
-                <span>My Account</span>
-            </a>
+        <div class="menu-item <?php echo $current_page == 'settings.php' ? 'active' : ''; ?>">
+            <img src="https://img.icons8.com/ios-glyphs/30/ffffff/settings.png" alt="Settings">
+            <span><a href="settings.php">Settings</a></span>
         </div>
         <div class="menu-item <?php echo $current_page == 'logout.php' ? 'active' : ''; ?>">
-            <a href="../php/logout.php">
-                <i class="fas fa-sign-out-alt"></i>
-                <span>Log Out</span>
-            </a>
+            <img src="https://img.icons8.com/ios-glyphs/30/ffffff/logout-rounded.png" alt="Logout">
+            <span><a href="../php/logout.php">Logout</a></span>
         </div>
         <div class="calendar">
             <h3>Calendar</h3>
             <p id="currentDate"></p>
         </div>
     </div>
+    
 </body>
-<script>        
-function updateCalendar() {
+<script>
+    
+    function updateCalendar() {
             const options = {
                 year: 'numeric',
                 month: 'long',
@@ -146,4 +140,3 @@ function updateCalendar() {
         updateCalendar();
 </script>
 </html>
-

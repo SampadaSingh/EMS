@@ -1,45 +1,40 @@
 <?php
-session_start();
 include '../config/connect.php';
+session_start();
 
+// Check if user is logged in and is an organizer
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'organizer') {
     header('Location: ../php/login.php');
     exit();
 }
 
 $organizer_id = $_SESSION['user_id'];
-$event_id = $_GET['event_id']?? '';
 $event_title = $_GET['event_title'] ?? '';
 
-$event_query = "SELECT * FROM events WHERE id = ? AND organizer_id = ?";
+// Verify the event belongs to the organizer
+$event_query = "SELECT * FROM events WHERE event_title = ? AND organizer_id = ?";
 $event_stmt = $conn->prepare($event_query);
-$event_stmt->bind_param("ii", $event_id, $organizer_id);
+$event_stmt->bind_param("si", $event_title, $organizer_id);
 $event_stmt->execute();
 $event_result = $event_stmt->get_result();
 
 if ($event_result->num_rows === 0) {
-    echo "No event found for this ID and Organizer.<br>";
+    header('Location: events.php');
     exit();
 }
 
 $event = $event_result->fetch_assoc();
 
+// Fetch participants for this event
 $query = "SELECT p.* FROM participants p 
-          WHERE p.event_id = ?
-          ORDER BY p.id ASC";
+          WHERE p.event_title = ?
+          ORDER BY p.created_at DESC";
 
 $stmt = $conn->prepare($query);
-$stmt->bind_param("i", $event_id);
+$stmt->bind_param("s", $event_title);
 $stmt->execute();
 $result = $stmt->get_result();
-
-if ($result->num_rows === 0) {
-    echo "No participants found for this Event ID.<br>";
-    exit();
-}
-
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -50,78 +45,7 @@ if ($result->num_rows === 0) {
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background-color: #f5f7fa;
-            display: flex;
-            min-height: 100vh;
-        }
-        .sidebar {
-            width: 270px;
-            background-color: #17153B;
-            color: white;
-            padding: 30px 20px;
-            position: fixed;
-            height: 100vh;
-        }
-
-        .sidebar h2 {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .menu-item {
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            border-radius: 5px;
-            transition: background 0.3s;
-        }
-
-        .menu-item:hover {
-            background-color: rgb(75, 64, 141);
-        }
-
-        .menu-item.active {
-            background-color: rgb(81, 64, 179);
-        }
-
-        .menu-item img {
-            width: 24px;
-            height: 24px;
-            margin-right: 15px;
-        }
-
-        .menu-item a {
-            color: white;
-            text-decoration: none;
-        }
-
-        .content {
-            flex-grow: 1;
-            margin-left: 300px;
-            padding: 40px;
-        }
-        
-        .calendar {
-            margin-top: 40px;
-            padding: 20px;
-            background-color: #2a2679;
-            border-radius: 10px;
-        }
-
-        .calendar h3 {
-            margin-bottom: 10px;
-        }
-
-        .content {
+        .content {  
             flex-grow: 1;
             margin-left: 300px;
             padding: 40px;
@@ -265,6 +189,7 @@ if ($result->num_rows === 0) {
 <body>
     <?php include 'sidebar.php'; ?>
 
+    <!-- Main Content -->
     <div class="content">
         <div class="header">
             <h1>Event Participants</h1>
@@ -307,9 +232,6 @@ if ($result->num_rows === 0) {
         <div class="participants-table">
             <div class="table-header">
                 <h3>Registered Participants</h3>
-                <a href="export_participants.php?event_title=<?php echo urlencode($event_title); ?>" class="export-btn">
-                    Export to Excel
-                </a>
             </div>
 
             <?php if ($result->num_rows > 0): ?>
@@ -340,6 +262,5 @@ if ($result->num_rows === 0) {
             <?php endif; ?>
         </div>
     </div>
-    
 </body>
-</html> 
+</html>
