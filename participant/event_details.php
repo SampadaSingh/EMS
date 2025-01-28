@@ -54,17 +54,6 @@ $total_registrations = $total_stmt->get_result()->fetch_assoc()['total'];
     <title><?php echo htmlspecialchars($event['event_title']); ?> - EMS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
-        }
-
-        body {
-            background-color: #f5f5f5;
-        }
-
         .dashboard-layout {
             display: flex;
             min-height: 100vh;
@@ -75,72 +64,6 @@ $total_registrations = $total_stmt->get_result()->fetch_assoc()['total'];
             margin-left: 250px;
             padding: 20px;
         }
-
-        /* Sidebar styles */
-        .sidebar {
-            width: 250px;
-            background-color: #17153B;
-            color: white;
-            position: fixed;
-            height: 100vh;
-            padding: 20px;
-        }
-
-        .logo {
-            font-size: 24px;
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .nav-links {
-            list-style: none;
-        }
-
-        .nav-item {
-            margin-bottom: 15px;
-        }
-
-        .nav-link {
-            display: flex;
-            align-items: center;
-            color: white;
-            text-decoration: none;
-            padding: 10px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-
-         .nav-link:hover{
-            background-color: rgb(75, 64, 141);
-        }
-        
-        .nav-link.active {
-            background-color: rgb(81, 64, 179);
-        }
-        
-        .nav-link i {
-            margin-right: 10px;
-            width: 20px;
-        }
-
-        .calendar {
-            margin-top: 40px;
-            padding: 20px;
-            background-color: #2a2679;
-            border-radius: 10px;
-        }
-
-        .calendar h3 {
-            margin-bottom: 10px;
-            font-size: 18px;
-            color: white;
-        }
-
-        .calendar p {
-            color: #ddd;
-            font-size: 14px;
-        }
-
         /* Event Details Styles */
         .event-container {
             max-width: 1000px;
@@ -276,46 +199,7 @@ $total_registrations = $total_stmt->get_result()->fetch_assoc()['total'];
 </head>
 <body>
     <div class="dashboard-layout">
-        <div class="sidebar">
-            <div class="logo">EMS</div>
-            <ul class="nav-links">
-                <li class="nav-item">
-                    <a href="dashboard.php" class="nav-link">
-                        <i class="fas fa-tachometer-alt"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="events.php" class="nav-link">
-                        <i class="fas fa-calendar-alt"></i>
-                        <span>Events</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="my_events.php" class="nav-link">
-                        <i class="fas fa-star"></i>
-                        <span>My Events</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="account.php" class="nav-link">
-                        <i class="fas fa-user"></i>
-                        <span>My Account</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="../php/logout.php" class="nav-link">
-                        <i class="fas fa-sign-out-alt"></i>
-                        <span>Log Out</span>
-                    </a>
-                </li>
-            </ul>
-            <div class="calendar">
-                <h3>Calendar</h3>
-                <p id="currentDate"></p>
-            </div>
-        </div>
-
+           <?php include 'sidebar.php'; ?>
         <div class="main-content">
             <div class="event-container">
                 <div class="event-header">
@@ -400,17 +284,5 @@ $total_registrations = $total_stmt->get_result()->fetch_assoc()['total'];
         </div>
     </div>
 
-    <script>
-        function updateCalendar() {
-            const options = { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-            };
-            const today = new Date().toLocaleDateString('en-US', options);
-            document.getElementById('currentDate').innerText = today;
-        }
-        updateCalendar();
-    </script>
 </body>
 </html>
