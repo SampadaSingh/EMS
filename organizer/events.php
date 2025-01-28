@@ -176,11 +176,10 @@ $result = $stmt->get_result();
 <body>
     <?php include 'sidebar.php'; ?>
 
-    <!-- Main Content -->
     <div class="content">
         <div class="header">
             <h1>My Events</h1>
-            <a href="create_event.php" class="create-btn">
+            <a href="createEvent.php" class="create-btn">
                 <i class="fas fa-plus"></i>
                 Create Event
             </a>
@@ -210,16 +209,16 @@ $result = $stmt->get_result();
                         </div>
                         
                         <div class="event-actions">
-                            <a href="view_participants.php?event_id=<?php echo urlencode($event['id']); ?>&event_title=<?php echo urlencode($event['event_title']); ?>" class="action-btn view-btn">View Participants</a>
-                            <a href="edit_event.php?id=<?php echo urlencode($event['id']); ?>" class="action-btn edit-btn">Edit</a>
-                            <a href="export_participants.php?event_id=<?php echo urlencode($event['id']); ?>" class="action-btn delete-btn">Delete</a>
+                            <a href="viewParticipants.php?event_id=<?php echo urlencode($event['id']); ?>&event_title=<?php echo urlencode($event['event_title']); ?>" class="action-btn view-btn">View Participants</a>
+                            <a href="editEvent.php?id=<?php echo urlencode($event['id']); ?>" class="action-btn edit-btn">Edit</a>
+                            <a href="exportParticipants.php?event_id=<?php echo urlencode($event['id']); ?>" class="action-btn delete-btn">Delete</a>
                         </div>
                     </div>
                 <?php endwhile; ?>
             <?php else: ?>
                 <div class="no-events">
                     <p>You haven't created any events yet.</p>
-                    <a href="create_event.php" class="create-btn" style="margin-top: 20px;">
+                    <a href="createEvent.php" class="create-btn" style="margin-top: 20px;">
                         <i class="fas fa-plus"></i>
                         Create Your First Event
                     </a>
