@@ -187,11 +187,11 @@ $totalOrganizers = $organizerResult->fetch_assoc()['total_organizers'];
         </div>
         <div class="menu-item">
             <img src="https://img.icons8.com/ios-glyphs/30/ffffff/conference.png" alt="Users">
-            <span><a href="users.php">Manage Users</a></span>
+            <span><a href="manageUsers.php">Manage Users</a></span>
         </div>
         <div class="menu-item">
             <img src="https://img.icons8.com/ios-glyphs/30/ffffff/calendar.png" alt="Events">
-            <span><a href="events.php">Manage Events</a></span>
+            <span><a href="manageEvents.php">Manage Events</a></span>
         </div>
         <div class="menu-item">
             <img src="https://img.icons8.com/ios-glyphs/30/ffffff/report-card.png" alt="Reports">

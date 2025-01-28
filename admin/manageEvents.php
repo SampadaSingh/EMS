@@ -223,11 +223,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
         <div class="menu-item">
             <img src="https://img.icons8.com/ios-glyphs/30/ffffff/conference.png" alt="Users">
-            <span><a href="users.php">Manage Users</a></span>
+            <span><a href="manageUsers.php">Manage Users</a></span>
         </div>
         <div class="menu-item active">
             <img src="https://img.icons8.com/ios-glyphs/30/ffffff/calendar.png" alt="Events">
-            <span><a href="events.php">Manage Events</a></span>
+            <span><a href="manageEvents.php">Manage Events</a></span>
         </div>
         <div class="menu-item">
             <img src="https://img.icons8.com/ios-glyphs/30/ffffff/report-card.png" alt="Reports">
@@ -246,7 +246,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="content">
         <div class="header">
             <h1>Manage Events</h1>
-            <a href="add_event.php" class="add-btn">Add New Event</a>
+            <a href="addEvent.php" class="add-btn">Add New Event</a>
         </div>
 
         <?php if (isset($_GET['message'])): ?>
@@ -289,7 +289,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <td>Rs. <?php echo number_format($event['event_fee'], 2); ?></td>
                         <td>
                             <div class="action-buttons">
-                                <a href="edit_event.php?id=<?php echo $event['id']; ?>" class="edit-btn">Edit</a>
+                                <a href="editEvent.php?id=<?php echo $event['id']; ?>" class="edit-btn">Edit</a>
                                 <form method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this event?');">
                                     <input type="hidden" name="action" value="delete">
                                     <input type="hidden" name="event_id" value="<?php echo $event['id']; ?>">
