@@ -211,7 +211,12 @@ $result = $stmt->get_result();
                         <div class="event-actions">
                             <a href="viewParticipants.php?event_id=<?php echo urlencode($event['id']); ?>&event_title=<?php echo urlencode($event['event_title']); ?>" class="action-btn view-btn">View Participants</a>
                             <a href="editEvent.php?id=<?php echo urlencode($event['id']); ?>" class="action-btn edit-btn">Edit</a>
-                            <a href="exportParticipants.php?event_id=<?php echo urlencode($event['id']); ?>" class="action-btn delete-btn">Delete</a>
+                            <!--<a href="deleteEvent.php?event_id=<?php echo urlencode($event['id']); ?>" class="action-btn delete-btn">Delete</a>-->
+                            <form method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this event?');">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="event_id" value="<?php echo $event['id']; ?>">
+                                    <button type="submit" class="action-btn delete-btn">Delete</button>
+                                </form>
                         </div>
                     </div>
                 <?php endwhile; ?>

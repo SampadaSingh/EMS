@@ -2,7 +2,6 @@
 include '../config/connect.php';
 session_start();
 
-// Check if user is logged in and is a participant
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'participant') {
     header('Location: ../php/login.php');
     exit();
@@ -12,7 +11,6 @@ $participant_id = $_SESSION['user_id'];
 $participant_email = $_SESSION['email'];
 $participant_name = $_SESSION['username']; 
 
-// Get participant's full name from database
 $name_query = "SELECT full_name FROM users WHERE id = ?";
 $name_stmt = $conn->prepare($name_query);
 $name_stmt->bind_param('i', $participant_id);
@@ -21,17 +19,17 @@ $name_result = $name_stmt->get_result();
 $user_data = $name_result->fetch_assoc();
 $full_name = $user_data['full_name'];
 
-// Get total participants count
+//total participants count
 $total_participants_query = "SELECT COUNT(DISTINCT p_email) as total FROM participants";
 $total_participants_result = $conn->query($total_participants_query);
 $total_participants = $total_participants_result->fetch_assoc()['total'];
 
-// Get total events count
+//total events count
 $total_events_query = "SELECT COUNT(*) as total FROM events";
 $total_events_result = $conn->query($total_events_query);
 $total_events = $total_events_result->fetch_assoc()['total'];
 
-// Get upcoming events
+//upcoming events
 $upcoming_query = "SELECT * FROM events 
                   WHERE start_date > CURDATE() 
                   ORDER BY start_date ASC 
@@ -199,10 +197,10 @@ $upcoming_result = $conn->query($upcoming_query);
 <?php include('sidebar.php'); ?>
         <div class="main-content">
             <div class="dashboard-container">
-                <div class="search-box">
-                    <input type="text" placeholder="Search events">
-                    <button>Search</button>
-                </div>
+                <!--<div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search events">
+                    <button onclick="searchEvents()">Search</button>
+                </div>-->
 
                 <div class="welcome-header">
                     <h1>Welcome, <?php echo htmlspecialchars($full_name); ?></h1>
@@ -238,6 +236,20 @@ $upcoming_result = $conn->query($upcoming_query);
             </div>
         </div>
     </div>
+    <script>
+        function searchEvents() {
+            let input = document.getElementById('searchInput').value.toLowerCase();
+            let events = document.querySelectorAll('.event');
+            
+            events.forEach(event => {
+                if (event.textContent.toLowerCase().includes(input)) {
+                    event.style.display = "";
+                } else {
+                    event.style.display = "none";
+                }
+            });
+        }
+    </script>
 
 </body>
 </html>

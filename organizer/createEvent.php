@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($stmt = $conn->prepare($query)) {
                 $stmt->bind_param(
-                    "sssssssssssssi",
+                    "ssssssssssssi",
                     $event_title,
                     $event_venue,
                     $event_location,
@@ -229,7 +229,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="alert alert-danger"><?php echo $error_message; ?></div>
         <?php endif; ?>
 
-        <form class="event-form" method="POST" enctype="multipart/form-data">
+        <form class="event-form" method="POST" action="createEvent.php" enctype="multipart/form-data">
             <div class="form-grid">
                 <div class="form-group">
                     <label for="event_title">Event Title</label>
@@ -296,5 +296,114 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
     </div>
 </body>
+<script>
+    function validateTitle() {
+        const title = document.getElementById('event_title').value.trim();
+        if (title.length < 2 || title.length > 100) {
+            alert('Enter a valid title');
+            return false;
+        }
+        return true;
+    }
+
+    function validateDate() {
+        const startDate = document.getElementById('start_date').value;
+        const endDate = document.getElementById('end_date').value;
+        const today = new Date();
+
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+
+        if (start < today || end < today) {
+            alert('Invalid Date');
+            return false;
+        }
+
+        if (end < start) {
+            alert('Invalid Date');
+            return false;
+        }
+        return true;
+    }
+
+    function validateTime() {
+        const startTime = document.getElementById('start_time').value;
+        const endTime = document.getElementById('end_time').value;
+
+        if (startTime && endTime) {
+            const start = new Date(`1970-01-01T${startTime}:00`);
+            const end = new Date(`1970-01-01T${endTime}:00`);
+            if (end <= start) {
+
+                alert('End Time must be after Start Time');
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function validateFee() {
+        const fee = document.getElementById('event_fee').value.trim();
+        if (isNaN(fee) || Number(fee) < 0) {
+            alert('Invalid Fee: Please enter a valid fee.');
+            return false;
+        }
+        return true;
+    }
+
+    function validateName() {
+        const name = document.getElementById('organizer_name').value.trim();
+
+        if (!name) {
+            alert('Name cannot be empty');
+            return false;
+        }
+
+        if (!/^[a-zA-Z\s'-]+$/.test(name)) {
+            alert('Invalid Name: Only letters and spaces are allowed.');
+            return false;
+        }
+        return true;
+    }
+
+
+    function validateContact() {
+        const contact = document.getElementById('organizer_contact').value;
+        if (isNaN(contact) || contact.length !== 10) {
+            alert('Invalid Contact');
+            return false;
+        }
+        return true;
+    }
+
+    function validateForm() {
+        return (
+            validateTitle() &&
+            validateFee() &&
+            validateDate() &&
+            validateTime() &&
+            validateName() &&
+            validateContact()
+        );
+    }
+
+    function handleSubmit(event) {
+        if (!validateForm()) {
+            event.preventDefault();
+        }
+    };
+
+    window.onload = function() {
+        const form = document.querySelector('.event-form');
+        form.addEventListener('submit', handleSubmit);
+        form.addEventListener('keypress', preventEnterSubmit);
+    };
+
+    function preventEnterSubmit(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+        }
+    }
+</script>
 
 </html>
