@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             event_fee = '$eventFee'
             $imageUpdate
             WHERE id = '$eventId'";
-    
+
     if ($conn->query($sql)) {
         header('Location: manageEvents.php?message=Event updated successfully');
         exit();
@@ -80,12 +80,12 @@ $event = $result->fetch_assoc();
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Event - Admin</title>
     <style>
-
         .content {
             margin-left: 250px;
             padding: 20px;
@@ -97,7 +97,7 @@ $event = $result->fetch_assoc();
             padding: 20px;
             border-radius: 10px;
             margin-bottom: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .header h1 {
@@ -109,7 +109,7 @@ $event = $result->fetch_assoc();
             background-color: white;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .form-group {
@@ -123,7 +123,8 @@ $event = $result->fetch_assoc();
             font-weight: 500;
         }
 
-        .form-group input, .form-group textarea {
+        .form-group input,
+        .form-group textarea {
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
@@ -183,9 +184,10 @@ $event = $result->fetch_assoc();
         }
     </style>
 </head>
+
 <body>
     <?php include 'sidebar.php'; ?>
-    
+
     <div class="content">
         <div class="header">
             <h1>Edit Event</h1>
@@ -265,11 +267,23 @@ $event = $result->fetch_assoc();
                 </div>
 
                 <div class="btn-container">
+<<<<<<< HEAD
                     <button type="submit" class="submit-btn">Update Event</button>
+=======
+                    <button type="submit" class="submit-btn" onclick="return showSuccessMessage()">Update Event</button>
+                    <script>
+                        function showSuccessMessage() {
+                            alert("Updated successfully!");
+                            window.location.href = "manageEvents.php";
+                            return false;
+                        }
+                    </script>
+>>>>>>> 35c50b2181201842ad287125b5186f3ca040c14f
                     <a href="manageEvents.php" class="cancel-btn">Cancel</a>
                 </div>
             </form>
         </div>
     </div>
 </body>
+
 </html>
