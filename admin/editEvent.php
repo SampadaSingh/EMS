@@ -4,7 +4,7 @@ include '../config/connect.php';
 
 // Get event ID from URL
 if (!isset($_GET['id'])) {
-    header('Location: events.php');
+    header('Location: manageEvents.php');
     exit();
 }
 
@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             WHERE id = '$eventId'";
     
     if ($conn->query($sql)) {
-        header('Location: events.php?message=Event updated successfully');
+        header('Location: manageEvents.php?message=Event updated successfully');
         exit();
     } else {
         $error = "Error updating event: " . $conn->error;
@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Get event data
 $result = $conn->query("SELECT * FROM events WHERE id = '$eventId'");
 if ($result->num_rows === 0) {
-    header('Location: events.php');
+    header('Location:   manageEvents.php');
     exit();
 }
 $event = $result->fetch_assoc();
@@ -266,7 +266,7 @@ $event = $result->fetch_assoc();
 
                 <div class="btn-container">
                     <button type="submit" class="submit-btn">Update Event</button>
-                    <a href="events.php" class="cancel-btn">Cancel</a>
+                    <a href="manageEvents.php" class="cancel-btn">Cancel</a>
                 </div>
             </form>
         </div>

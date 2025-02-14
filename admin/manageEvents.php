@@ -10,11 +10,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $event_id = $conn->real_escape_string($_POST['event_id']);
         $sql = "DELETE FROM events WHERE id = '$event_id'";
         if ($conn->query($sql)) {
-            header('Location: events.php?message=Event deleted successfully');
+            $_SESSION['success_message'] = "Event deleted successfully!";
+            header('Location: manageEvents.php');
+            exit();
+        } else {
+            $_SESSION['error_message'] = "Error deleting event: " . $conn->error;
+            header('Location: manageEvents.php');
             exit();
         }
     }
 }
+
+// Get any messages
+$success_message = isset($_SESSION['success_message']) ? $_SESSION['success_message'] : '';
+$error_message = isset($_SESSION['error_message']) ? $_SESSION['error_message'] : '';
+
+// Clear the messages
+unset($_SESSION['success_message']);
+unset($_SESSION['error_message']);
 ?>
 
 <!DOCTYPE html>
@@ -153,6 +166,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             color: #155724;
             border: 1px solid #c3e6cb;
         }
+
+        .success-message {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error-message {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
     </style>
 </head>
 <body>
@@ -161,11 +192,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="content">
         <div class="header">
             <h1>Manage Events</h1>
-            <a href="addEvent.php" class="add-btn">Add New Event</a>
+            <a href="addEvent.php" class="add-btn">Add Event</a>
         </div>
 
-        <?php if (isset($_GET['message'])): ?>
-            <div class="alert alert-success"><?php echo $_GET['message']; ?></div>
+        <?php if ($success_message): ?>
+            <div class="success-message"><?php echo htmlspecialchars($success_message); ?></div>
+        <?php endif; ?>
+
+        <?php if ($error_message): ?>
+            <div class="error-message"><?php echo htmlspecialchars($error_message); ?></div>
         <?php endif; ?>
 
         <div class="events-table">
@@ -220,4 +255,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </body>
 </html>
-

@@ -50,9 +50,9 @@ if ($check_query->num_rows > 0) {
     echo "<script>alert('You are already registered for this event.');</script>";
     echo "<script>window.location = 'myEvents.php';</script>";
 } else {
-    $stmt = $conn->prepare("INSERT INTO participants (p_name, p_email, p_phone, event_title, event_id, created_at) 
-                            VALUES (?, ?, ?, ?, ?, NOW())");
-    $stmt->bind_param("ssssi", $p_name, $p_email, $p_phone, $event_title, $event_id);
+    $stmt = $conn->prepare("INSERT INTO participants (p_name, p_email, p_phone, event_title, created_at) 
+                            VALUES (?, ?, ?, ?, NOW())");
+    $stmt->bind_param("ssss", $p_name, $p_email, $p_phone, $event_title);
 
     if ($stmt->execute()) {
 

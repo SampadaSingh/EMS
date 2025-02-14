@@ -2,6 +2,7 @@
 include '../config/connect.php';
 session_start();
 
+// Check if user is logged in and is an organizer
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'organizer') {
     header('Location: ../php/login.php');
     exit();
@@ -12,6 +13,7 @@ $success_message = '';
 $error_message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Get form data with null coalescing operator
     $event_title = $_POST['event_title'] ?? '';
     $event_venue = $_POST['event_venue'] ?? '';
     $event_location = $_POST['event_location'] ?? '';
@@ -25,14 +27,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $event_description = $_POST['event_description'] ?? '';
     $event_image = $_FILES['event_image'] ?? null;
 
-    if (
-        empty($event_title) || empty($event_venue) || empty($event_location) ||
+    // Validate required fields
+    if (empty($event_title) || empty($event_venue) || empty($event_location) ||
         empty($start_time) || empty($end_time) || empty($start_date) || empty($end_date) ||
-        empty($event_fee) || empty($organizer_name) || empty($organizer_contact) ||
-        empty($event_description)
-    ) {
-        $error_message = "All fields are required.";
+        empty($organizer_name) || empty($organizer_contact) || empty($event_description)) {
+        $error_message = "All fields are required except event fee and image.";
     } else {
+        // Handle image upload
         $image_path = '';
         if ($event_image && $event_image['error'] === UPLOAD_ERR_OK) {
             $allowed_types = ['image/jpeg', 'image/png', 'image/jpg'];
@@ -42,7 +43,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $error_message = "Only JPG, JPEG & PNG files are allowed.";
             } else {
                 $file_name = uniqid() . '_' . basename($event_image['name']);
-                $upload_path = '../uploads/' . $file_name;
+                $upload_dir = '../uploads/';
+                
+                // Create directory if it doesn't exist
+                if (!file_exists($upload_dir)) {
+                    mkdir($upload_dir, 0777, true);
+                }
+                
+                $upload_path = $upload_dir . $file_name;
 
                 if (move_uploaded_file($event_image['tmp_name'], $upload_path)) {
                     $image_path = $file_name;
@@ -52,40 +60,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
+        // If no errors, proceed with database insertion
         if (empty($error_message)) {
-            $query = "INSERT INTO events (event_title, event_venue, event_location, start_time, end_time, 
-                     start_date, end_date, event_fee, organizer_name, organizer_contact, 
-                     event_description, event_image, organizer_id, created_at) 
-                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+            $query = "INSERT INTO events (
+                event_title, event_venue, event_location, start_time, end_time,
+                start_date, end_date, event_fee, organizer_name, organizer_contact,
+                event_description, event_image, organizer_id
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-            if ($stmt = $conn->prepare($query)) {
-                $stmt->bind_param(
-                    "sssssssssssssi",
-                    $event_title,
-                    $event_venue,
-                    $event_location,
-                    $start_time,
-                    $end_time,
-                    $start_date,
-                    $end_date,
-                    $event_fee,
-                    $organizer_name,
-                    $organizer_contact,
-                    $event_description,
-                    $image_path,
-                    $organizer_id
-                );
+            try {
+                $stmt = $conn->prepare($query);
+                
+                if ($stmt) {
+                    $stmt->bind_param("ssssssssssssi",
+                        $event_title,
+                        $event_venue,
+                        $event_location,
+                        $start_time,
+                        $end_time,
+                        $start_date,
+                        $end_date,
+                        $event_fee,
+                        $organizer_name,
+                        $organizer_contact,
+                        $event_description,
+                        $image_path,
+                        $organizer_id
+                    );
 
-                if ($stmt->execute()) {
-                    $success_message = "Event created successfully!";
-                    header("Location: events.php");
-                    exit();
+                    if ($stmt->execute()) {
+                        $_SESSION['success_message'] = "Event created successfully!";
+                        header("Location: events.php");
+                        exit();
+                    } else {
+                        $error_message = "Error executing query: " . $stmt->error;
+                    }
+                    $stmt->close();
                 } else {
-                    $error_message = "Error creating event. Please try again.";
+                    $error_message = "Error preparing statement: " . $conn->error;
                 }
-                $stmt->close();
-            } else {
-                $error_message = "Database error. Please try again later.";
+            } catch (Exception $e) {
+                $error_message = "Database error: " . $e->getMessage();
             }
         }
     }
@@ -94,7 +109,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -213,8 +227,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border: 1px solid #f5c6cb;
         }
     </style>
-</head>
+    <script>
+        function validateForm() {
+            // Get form elements
+            const organizerName = document.getElementById('organizer_name').value;
+            const organizerContact = document.getElementById('organizer_contact').value;
+            const eventTitle = document.getElementById('event_title').value;
 
+            // Name validation (no numbers allowed)
+            const nameRegex = /^[A-Za-z\s]+$/;
+            if (!nameRegex.test(organizerName)) {
+                alert('Organizer name should only contain letters and spaces');
+                return false;
+            }
+
+            // Phone number validation (exactly 10 digits)
+            const phoneRegex = /^\d{10}$/;
+            if (!phoneRegex.test(organizerContact)) {
+                alert('Contact number must be exactly 10 digits');
+                return false;
+            }
+
+            // Event title validation (alphanumeric and spaces only)
+            const titleRegex = /^[A-Za-z0-9\s]+$/;
+            if (!titleRegex.test(eventTitle)) {
+                alert('Event title should only contain letters, numbers, and spaces');
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+</head>
 <body>
     <div class="content">
         <div class="header">
@@ -229,67 +273,67 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="alert alert-danger"><?php echo $error_message; ?></div>
         <?php endif; ?>
 
-        <form class="event-form" method="POST" enctype="multipart/form-data">
+        <form class="event-form" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="event_title">Event Title</label>
-                    <input type="text" id="event_title" name="event_title" required>
+                    <label for="event_title">Event Title*</label>
+                    <input type="text" id="event_title" name="event_title" pattern="[A-Za-z0-9\s]+" title="Only letters, numbers, and spaces allowed" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="event_venue">Event Venue</label>
+                    <label for="event_venue">Event Venue*</label>
                     <input type="text" id="event_venue" name="event_venue" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="event_location">Event Location</label>
+                    <label for="event_location">Event Location*</label>
                     <input type="text" id="event_location" name="event_location" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="start_time">Start Time</label>
+                    <label for="start_time">Start Time*</label>
                     <input type="time" id="start_time" name="start_time" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="end_time">End Time</label>
+                    <label for="end_time">End Time*</label>
                     <input type="time" id="end_time" name="end_time" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="start_date">Start Date</label>
+                    <label for="start_date">Start Date*</label>
                     <input type="date" id="start_date" name="start_date" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="end_date">End Date</label>
+                    <label for="end_date">End Date*</label>
                     <input type="date" id="end_date" name="end_date" required>
                 </div>
 
                 <div class="form-group">
                     <label for="event_fee">Event Fee</label>
-                    <input type="number" id="event_fee" name="event_fee" step="0.01" value="0.00" required>
+                    <input type="number" id="event_fee" name="event_fee" value="0" min="0">
                 </div>
 
                 <div class="form-group">
-                    <label for="organizer_name">Organizer Name</label>
-                    <input type="text" id="organizer_name" name="organizer_name" required>
+                    <label for="organizer_name">Organizer Name* (letters only)</label>
+                    <input type="text" id="organizer_name" name="organizer_name" pattern="[A-Za-z\s]+" title="Only letters and spaces allowed" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="organizer_contact">Organizer Contact</label>
-                    <input type="text" id="organizer_contact" name="organizer_contact" required>
+                    <label for="organizer_contact">Organizer Contact* (10 digits)</label>
+                    <input type="tel" id="organizer_contact" name="organizer_contact" pattern="\d{10}" title="Please enter exactly 10 digits" required>
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="event_description">Event Description</label>
+                <label for="event_description">Event Description*</label>
                 <textarea id="event_description" name="event_description" required></textarea>
             </div>
 
             <div class="form-group">
                 <label for="event_image">Event Image</label>
-                <input type="file" id="event_image" name="event_image" accept="image/*">
+                <input type="file" id="event_image" name="event_image" accept="image/jpeg,image/png,image/jpg">
             </div>
 
             <button type="submit" class="submit-btn">Create Event</button>

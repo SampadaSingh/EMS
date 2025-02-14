@@ -3,10 +3,10 @@ session_start();
 include '../config/connect.php';
 
 // Check if user is logged in and is admin
-// if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-//     header('Location: ../index.php');
-//     exit();
-// }
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+    header('Location: ../index.php');
+    exit();
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = $conn->real_escape_string($_POST['event_title']);
@@ -21,40 +21,66 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $organizerContact = $conn->real_escape_string($_POST['organizer_contact']);
     $eventFee = $conn->real_escape_string($_POST['event_fee']);
 
-    // Handle image upload
-    $eventImage = '';
-    if (isset($_FILES['event_image']) && $_FILES['event_image']['error'] === 0) {
-        $targetDir = "../assets/uploads/";
-        $imageFileType = strtolower(pathinfo($_FILES["event_image"]["name"], PATHINFO_EXTENSION));
-        $newFileName = "IMG-" . uniqid() . "-" . $_FILES["event_image"]["name"];
-        $targetFile = $targetDir . $newFileName;
+    // Validate contact number
+    if (!preg_match("/^\d{10}$/", $organizerContact)) {
+        $_SESSION['error_message'] = "Contact number must be exactly 10 digits";
+    } 
+    // Validate organizer name
+    else if (!preg_match("/^[A-Za-z\s]+$/", $organizerName)) {
+        $_SESSION['error_message'] = "Organizer name should only contain letters and spaces";
+    }
+    else {
+        // Handle image upload
+        $eventImage = '';
+        if (isset($_FILES['event_image']) && $_FILES['event_image']['error'] === 0) {
+            $targetDir = "../assets/uploads/";
+            $imageFileType = strtolower(pathinfo($_FILES["event_image"]["name"], PATHINFO_EXTENSION));
+            
+            // Check file type
+            if ($imageFileType != "jpg" && $imageFileType != "jpeg" && $imageFileType != "png") {
+                $_SESSION['error_message'] = "Sorry, only JPG, JPEG & PNG files are allowed.";
+            } else {
+                $newFileName = "IMG-" . uniqid() . "." . $imageFileType;
+                $targetFile = $targetDir . $newFileName;
 
-        // Check if image file is a actual image or fake image
-        $check = getimagesize($_FILES["event_image"]["tmp_name"]);
-        if ($check !== false) {
-            if (move_uploaded_file($_FILES["event_image"]["tmp_name"], $targetFile)) {
-                $eventImage = $newFileName;
+                // Check if image file is a actual image
+                $check = getimagesize($_FILES["event_image"]["tmp_name"]);
+                if ($check === false) {
+                    $_SESSION['error_message'] = "File is not an image.";
+                } else if (!move_uploaded_file($_FILES["event_image"]["tmp_name"], $targetFile)) {
+                    $_SESSION['error_message'] = "Sorry, there was an error uploading your file.";
+                } else {
+                    $eventImage = $newFileName;
+                }
+            }
+        }
+
+        if (!isset($_SESSION['error_message'])) {
+            $sql = "INSERT INTO events (event_title, event_venue, event_location, start_time, end_time, 
+                    start_date, end_date, event_description, organizer_name, organizer_contact, 
+                    event_image, event_fee) 
+                    VALUES ('$title', '$venue', '$location', '$startTime', '$endTime', 
+                    '$startDate', '$endDate', '$description', '$organizerName', '$organizerContact', 
+                    '$eventImage', '$eventFee')";
+            
+            if ($conn->query($sql)) {
+                $_SESSION['success_message'] = "Event added successfully!";
+                header('Location: manageEvents.php');
+                exit();
+            } else {
+                $_SESSION['error_message'] = "Error adding event: " . $conn->error;
             }
         }
     }
-
-    $sql = "INSERT INTO events (event_title, event_venue, event_location, start_time, end_time, 
-            start_date, end_date, event_description, organizer_name, organizer_contact, 
-            event_image, event_fee) 
-            VALUES ('$title', '$venue', '$location', '$startTime', '$endTime', 
-            '$startDate', '$endDate', '$description', '$organizerName', '$organizerContact', 
-            '$eventImage', '$eventFee')";
-    
-    if ($conn->query($sql)) {
-        header('Location: events.php?message=Event added successfully');
-        exit();
-    } else {
-        $error = "Error adding event: " . $conn->error;
-    }
 }
 
-// Get list of organizers for dropdown
-$organizers = $conn->query("SELECT id, full_name FROM users WHERE role = 'organizer'");
+// Get any messages
+$success_message = isset($_SESSION['success_message']) ? $_SESSION['success_message'] : '';
+$error_message = isset($_SESSION['error_message']) ? $_SESSION['error_message'] : '';
+
+// Clear the messages
+unset($_SESSION['success_message']);
+unset($_SESSION['error_message']);
 ?>
 
 <!DOCTYPE html>
@@ -155,6 +181,24 @@ $organizers = $conn->query("SELECT id, full_name FROM users WHERE role = 'organi
             color: #e74c3c;
             margin-bottom: 20px;
         }
+
+        .success-message {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .error-message {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
     </style>
 </head>
 <body>
@@ -165,11 +209,15 @@ $organizers = $conn->query("SELECT id, full_name FROM users WHERE role = 'organi
             <h1>Add New Event</h1>
         </div>
 
-        <div class="form-container">
-            <?php if (isset($error)): ?>
-                <div class="error"><?php echo $error; ?></div>
-            <?php endif; ?>
+        <?php if ($error_message): ?>
+            <div class="error-message"><?php echo htmlspecialchars($error_message); ?></div>
+        <?php endif; ?>
 
+        <?php if ($success_message): ?>
+            <div class="success-message"><?php echo htmlspecialchars($success_message); ?></div>
+        <?php endif; ?>
+
+        <div class="form-container">
             <form method="POST" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="event_title">Event Title</label>
@@ -233,7 +281,7 @@ $organizers = $conn->query("SELECT id, full_name FROM users WHERE role = 'organi
 
                 <div class="btn-container">
                     <button type="submit" class="submit-btn">Add Event</button>
-                    <a href="events.php" class="cancel-btn">Cancel</a>
+                    <a href="manageEvents.php" class="cancel-btn">Cancel</a>
                 </div>
             </form>
         </div>

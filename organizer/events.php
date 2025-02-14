@@ -153,6 +153,22 @@ $result = $stmt->get_result();
             opacity: 0.9;
         }
 
+        .success-message {
+            background-color: #dff0d8;
+            color: #3c763d;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .error-message {
+            background-color: #f2dede;
+            color: #a94442;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
         @media (max-width: 768px) {
             .sidebar {
                 width: 60px;
@@ -185,6 +201,20 @@ $result = $stmt->get_result();
             </a>
         </div>
 
+        <?php
+        // Display success message if set
+        if (isset($_SESSION['success_message'])) {
+            echo '<div class="success-message">' . htmlspecialchars($_SESSION['success_message']) . '</div>';
+            unset($_SESSION['success_message']);
+        }
+
+        // Display error message if set
+        if (isset($_SESSION['error_message'])) {
+            echo '<div class="error-message">' . htmlspecialchars($_SESSION['error_message']) . '</div>';
+            unset($_SESSION['error_message']);
+        }
+        ?>
+
         <div class="events-grid">
             <?php if ($result->num_rows > 0): ?>
                 <?php while ($event = $result->fetch_assoc()): ?>
@@ -211,7 +241,7 @@ $result = $stmt->get_result();
                         <div class="event-actions">
                             <a href="viewParticipants.php?event_id=<?php echo urlencode($event['id']); ?>&event_title=<?php echo urlencode($event['event_title']); ?>" class="action-btn view-btn">View Participants</a>
                             <a href="editEvent.php?id=<?php echo urlencode($event['id']); ?>" class="action-btn edit-btn">Edit</a>
-                            <a href="exportParticipants.php?event_id=<?php echo urlencode($event['id']); ?>" class="action-btn delete-btn">Delete</a>
+                            <a href="deleteEvent.php?event_id=<?php echo urlencode($event['id']); ?>" class="action-btn delete-btn" onclick="return confirm('Are you sure you want to delete this event? This action cannot be undone.');">Delete</a>
                         </div>
                     </div>
                 <?php endwhile; ?>
