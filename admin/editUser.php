@@ -190,21 +190,18 @@ $user = $result->fetch_assoc();
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
-            // Username validation (letters and spaces only)
-            const nameRegex = /^[A-Za-z\s]+$/;
+            const nameRegex = /^[A-Za-z_]+$/;
             if (!nameRegex.test(username)) {
-                alert('Username should only contain letters and spaces');
+                alert('Username should only contain letters and underscores');
                 return false;
             }
 
-            // Email validation
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
                 alert('Please enter a valid email address');
                 return false;
             }
 
-            // Password validation (if provided)
             if (password !== '' && password.length < 6) {
                 alert('Password must be at least 6 characters long');
                 return false;
