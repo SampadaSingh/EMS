@@ -30,9 +30,11 @@ try {
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Validate required fields
-        if (empty($_POST['event_title']) || empty($_POST['event_venue']) || empty($_POST['event_location']) ||
-            empty($_POST['start_time']) || empty($_POST['end_time']) || empty($_POST['start_date']) || 
-            empty($_POST['end_date']) || empty($_POST['organizer_name']) || empty($_POST['organizer_contact'])) {
+        if (
+            empty($_POST['event_title']) || empty($_POST['event_venue']) || empty($_POST['event_location']) ||
+            empty($_POST['start_time']) || empty($_POST['end_time']) || empty($_POST['start_date']) ||
+            empty($_POST['end_date']) || empty($_POST['organizer_name']) || empty($_POST['organizer_contact'])
+        ) {
             $error_message = "All fields are required except event fee and image.";
         } else {
             $event_title = $_POST['event_title'];
@@ -48,7 +50,8 @@ try {
             $event_fee = $_POST['event_fee'] ?? 0;
 
             // Handle image upload
-            $image_path = $event['event_image']; // Keep existing image by default
+            $image_path = $event['event_image'];
+
             if (isset($_FILES['event_image']) && $_FILES['event_image']['error'] === 0) {
                 $allowed_types = ['image/jpeg', 'image/png', 'image/jpg'];
                 $file_type = $_FILES['event_image']['type'];
@@ -56,26 +59,27 @@ try {
                 if (!in_array($file_type, $allowed_types)) {
                     $error_message = "Only JPG, JPEG & PNG files are allowed.";
                 } else {
-                    $file_name = uniqid() . '_' . basename($_FILES['event_image']['name']);
+                    $file_name = uniqid('IMG-', true) . '-' . basename($_FILES['event_image']['name']);
                     $upload_dir = '../uploads/';
-                    
-                    if (!file_exists($upload_dir)) {
+
+                    if (!is_dir($upload_dir)) {
                         mkdir($upload_dir, 0777, true);
                     }
-                    
+
                     $upload_path = $upload_dir . $file_name;
 
                     if (move_uploaded_file($_FILES['event_image']['tmp_name'], $upload_path)) {
-                        // Delete old image if exists
                         if ($event['event_image'] && file_exists($upload_dir . $event['event_image'])) {
                             unlink($upload_dir . $event['event_image']);
                         }
+
                         $image_path = $file_name;
                     } else {
                         $error_message = "Failed to upload image.";
                     }
                 }
             }
+
 
             if (empty($error_message)) {
                 // Update event in database
@@ -87,11 +91,22 @@ try {
                     WHERE id = ? AND organizer_id = ?";
 
                 $stmt = $conn->prepare($query);
-                $stmt->bind_param("ssssssssssssii",
-                    $event_title, $event_venue, $event_location,
-                    $start_time, $end_time, $start_date, $end_date,
-                    $event_fee, $organizer_name, $organizer_contact,
-                    $event_description, $image_path, $event_id, $organizer_id
+                $stmt->bind_param(
+                    "ssssssssssssii",
+                    $event_title,
+                    $event_venue,
+                    $event_location,
+                    $start_time,
+                    $end_time,
+                    $start_date,
+                    $end_date,
+                    $event_fee,
+                    $organizer_name,
+                    $organizer_contact,
+                    $event_description,
+                    $image_path,
+                    $event_id,
+                    $organizer_id
                 );
 
                 if ($stmt->execute()) {
@@ -111,6 +126,7 @@ try {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -132,7 +148,7 @@ try {
             background: white;
             padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .form-grid {
@@ -196,7 +212,7 @@ try {
         .current-image img {
             max-width: 200px;
             border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .form-actions {
@@ -252,7 +268,8 @@ try {
                 width: 60px;
             }
 
-            .sidebar h2, .menu-item span {
+            .sidebar h2,
+            .menu-item span {
                 display: none;
             }
 
@@ -269,26 +286,22 @@ try {
     <script src="../assets/js/script.js"></script>
     <script>
         function validateForm() {
-            // Get form elements
             const organizerName = document.getElementById('organizer_name').value;
             const organizerContact = document.getElementById('organizer_contact').value;
             const eventTitle = document.getElementById('event_title').value;
 
-            // Name validation (no numbers allowed)
             const nameRegex = /^[A-Za-z\s]+$/;
             if (!nameRegex.test(organizerName)) {
                 alert('Organizer name should only contain letters and spaces');
                 return false;
             }
 
-            // Phone number validation (exactly 10 digits)
             const phoneRegex = /^\d{10}$/;
             if (!phoneRegex.test(organizerContact)) {
                 alert('Contact number must be exactly 10 digits');
                 return false;
             }
 
-            // Event title validation (alphanumeric and spaces only)
             const titleRegex = /^[A-Za-z0-9\s]+$/;
             if (!titleRegex.test(eventTitle)) {
                 alert('Event title should only contain letters, numbers, and spaces');
@@ -299,10 +312,10 @@ try {
         }
     </script>
 </head>
+
 <body>
     <?php include 'sidebar.php'; ?>
 
-    <!-- Main Content -->
     <div class="content">
         <div class="header">
             <h1>Edit Event</h1>
@@ -378,8 +391,8 @@ try {
                     <?php if ($event['event_image']): ?>
                         <div class="current-image">
                             <p>Current Image:</p>
-                            <img src="../uploads/<?php echo htmlspecialchars($event['event_image']); ?>" 
-                                 alt="Current event image">
+                            <img src="../uploads/<?php echo htmlspecialchars($event['event_image']); ?>"
+                                alt="Current event image">
                         </div>
                     <?php endif; ?>
                     <input type="file" id="event_image" name="event_image" accept="image/*">
@@ -399,4 +412,5 @@ try {
         });
     </script>
 </body>
+
 </html>

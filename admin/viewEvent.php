@@ -27,6 +27,7 @@ $event = $result->fetch_assoc();
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -39,35 +40,42 @@ $event = $result->fetch_assoc();
             padding: 20px;
             background: white;
             border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
+
         .event-header {
             background: #17153B;
             color: white;
             padding: 20px;
             text-align: center;
         }
+
         .event-title {
             margin: 0;
         }
+
         .event-image {
             width: 100%;
             height: 300px;
             object-fit: cover;
             border-bottom: 1px solid #ddd;
         }
+
         .event-details {
             padding: 20px;
             display: flex;
             flex-direction: column;
         }
+
         .detail-item {
             margin-bottom: 10px;
         }
+
         .detail-item i {
             margin-right: 10px;
             color: #47338f;
         }
+
         .back-btn {
             display: inline-block;
             padding: 10px 20px;
@@ -80,17 +88,19 @@ $event = $result->fetch_assoc();
         }
     </style>
 </head>
+
 <body>
     <div class="event-container">
         <div class="event-header">
             <h1 class="event-title"><?php echo htmlspecialchars($event['event_title']); ?></h1>
         </div>
-        
+
         <?php if ($event['event_image']): ?>
-            <img src="../assets/uploads/<?php echo htmlspecialchars($event['event_image']); ?>" 
-                 alt="<?php echo htmlspecialchars($event['event_title']); ?>" 
-                 class="event-image">
+            <img src="/EMS/assets/uploads/<?php echo htmlspecialchars($event['event_image']); ?>"
+                alt="<?php echo htmlspecialchars($event['event_title']); ?>"
+                class="event-image">
         <?php endif; ?>
+
 
         <div class="event-details">
             <div class="detail-item">
@@ -114,4 +124,5 @@ $event = $result->fetch_assoc();
         </div>
     </div>
 </body>
+
 </html>

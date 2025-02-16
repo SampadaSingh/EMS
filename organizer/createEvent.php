@@ -25,12 +25,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $event_description = $_POST['event_description'] ?? '';
     $event_image = $_FILES['event_image'] ?? null;
 
-    if (empty($event_title) || empty($event_venue) || empty($event_location) ||
+    if (
+        empty($event_title) || empty($event_venue) || empty($event_location) ||
         empty($start_time) || empty($end_time) || empty($start_date) || empty($end_date) ||
-        empty($organizer_name) || empty($organizer_contact) || empty($event_description)) {
+        empty($organizer_name) || empty($organizer_contact) || empty($event_description)
+    ) {
         $error_message = "All fields are required except event fee and image.";
     } else {
-        // Handle image upload
+        /*Handle image upload
         $image_path = '';
         if ($event_image && $event_image['error'] === UPLOAD_ERR_OK) {
             $allowed_types = ['image/jpeg', 'image/png', 'image/jpg'];
@@ -55,7 +57,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $error_message = "Failed to upload image.";
                 }
             }
+        }*/
+        // img
+        $image_path = '';
+        $error_message = '';
+        
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['event_image'])) {
+        
+            $event_image = $_FILES['event_image'];
+        
+            if ($event_image['error'] === UPLOAD_ERR_OK) {
+        
+                $allowed_types = ['image/jpeg', 'image/png', 'image/jpg'];
+                $file_type = $event_image['type'];
+        
+                if (!in_array($file_type, $allowed_types)) {
+                    $error_message = "Only JPG, JPEG & PNG files are allowed.";
+                } else {
+                    $max_file_size = 2 * 1024 * 1024; 
+                    if ($event_image['size'] > $max_file_size) {
+                        $error_message = "File size exceeds 2MB.";
+                    } else {
+                        $file_name = uniqid('IMG-', true) . '-' . basename($event_image['name']);
+                        $upload_dir = 'uploads/'; 
+        
+                        if (!is_dir($upload_dir)) {
+                            mkdir($upload_dir, 0777, true);
+                        }
+        
+                        $upload_path = $upload_dir . $file_name;
+        
+                        if (move_uploaded_file($event_image['tmp_name'], $upload_path)) {
+                            $image_path = $file_name;
+                        } else {
+                            $error_message = "Failed to upload image.";
+                        }
+                    }
+                }
+            } else {
+                $error_message = "Error occurred during image upload.";
+            }
         }
+        
 
         if (empty($error_message)) {
             $query = "INSERT INTO events (
@@ -66,9 +109,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             try {
                 $stmt = $conn->prepare($query);
-                
+
                 if ($stmt) {
-                    $stmt->bind_param("ssssssssssssi",
+                    $stmt->bind_param(
+                        "ssssssssssssi",
                         $event_title,
                         $event_venue,
                         $event_location,
@@ -105,6 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -255,6 +300,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     </script>
 </head>
+
 <body>
     <div class="content">
         <div class="header">
@@ -273,7 +319,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="form-grid">
                 <div class="form-group">
                     <label for="event_title">Event Title*</label>
-                    <input type="text" id="event_title" name="event_title" pattern="[A-Za-z0-9\s]+" title="Only letters, numbers, and spaces allowed" required>
+                    <input type="text" id="event_title" name="event_title" pattern="[A-Za-z0-9\s'-]+" title="Only letters, numbers, and spaces allowed" required>
                 </div>
 
                 <div class="form-group">
