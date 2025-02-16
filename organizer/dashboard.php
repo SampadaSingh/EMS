@@ -9,6 +9,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'organizer') {
 
 $organizer_id = $_SESSION['user_id'];
 
+//user details
 $user_query = "SELECT full_name FROM users WHERE id = ?";
 $user_stmt = $conn->prepare($user_query);
 $user_stmt->bind_param("i", $organizer_id);
@@ -16,6 +17,7 @@ $user_stmt->execute();
 $user_result = $user_stmt->get_result();
 $user = $user_result->fetch_assoc();
 
+//total events
 $events_query = "SELECT COUNT(*) as total_events FROM events WHERE organizer_id = ?";
 $events_stmt = $conn->prepare($events_query);
 $events_stmt->bind_param("i", $organizer_id);
@@ -23,6 +25,7 @@ $events_stmt->execute();
 $events_result = $events_stmt->get_result();
 $total_events = $events_result->fetch_assoc()['total_events'];
 
+//total participants
 $participants_query = "SELECT COUNT(DISTINCT p.id) as total_participants 
                       FROM participants p 
                       JOIN events e ON p.event_title = e.event_title 
@@ -33,6 +36,7 @@ $participants_stmt->execute();
 $participants_result = $participants_stmt->get_result();
 $total_participants = $participants_result->fetch_assoc()['total_participants'];
 
+//upcoming events
 $upcoming_query = "SELECT * FROM events 
                   WHERE organizer_id = ? 
                   AND start_date >= CURDATE() 
@@ -42,6 +46,17 @@ $upcoming_stmt = $conn->prepare($upcoming_query);
 $upcoming_stmt->bind_param("i", $organizer_id);
 $upcoming_stmt->execute();
 $upcoming_result = $upcoming_stmt->get_result();
+
+//recent events
+$recent_query = "SELECT * FROM events 
+                WHERE organizer_id = ? 
+                AND start_date < CURDATE() 
+                ORDER BY start_date DESC 
+                LIMIT 5";
+$recent_stmt = $conn->prepare($recent_query);
+$recent_stmt->bind_param("i", $organizer_id);
+$recent_stmt->execute();
+$recent_result = $recent_stmt->get_result();
 ?>
 
 <!DOCTYPE html>
@@ -116,7 +131,14 @@ $upcoming_result = $upcoming_stmt->get_result();
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .upcoming-events h2 {
+        .recent-events {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+        .upcoming-events h2, .recent-events h2 {
             margin-bottom: 20px;
             color: #17153B;
         }
@@ -184,6 +206,23 @@ $upcoming_result = $upcoming_stmt->get_result();
             <?php else: ?>
                 <p>No upcoming events</p>
             <?php endif; ?>
+        </div>
+
+        <div class = "recent-events">
+            <h2>Your Recent Events</h2>
+            <?php if ($recent_result->num_rows > 0): ?>
+                <?php while ($event = $recent_result->fetch_assoc()): ?>
+                    <div class="event">
+                        <div>
+                            <p><strong><?php echo htmlspecialchars($event['event_title']); ?></strong></p>
+                            <p>Date: <?php echo date('F j, Y', strtotime($event['start_date'])); ?></p>
+                        </div>
+                    </div>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <p>No recent events</p>
+            <?php endif; ?>
+
         </div>
     </div>
 

@@ -359,12 +359,12 @@ try {
                 </div>
 
                 <div class="form-group">
-                    <label for="organizer_name">Organizer Name* (letters only)</label>
+                    <label for="organizer_name">Organizer Name*</label>
                     <input type="text" id="organizer_name" name="organizer_name" value="<?php echo htmlspecialchars($event['organizer_name']); ?>" pattern="[A-Za-z\s]+" title="Only letters and spaces allowed" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="organizer_contact">Organizer Contact* (10 digits)</label>
+                    <label for="organizer_contact">Organizer Contact*</label>
                     <input type="tel" id="organizer_contact" name="organizer_contact" value="<?php echo htmlspecialchars($event['organizer_contact']); ?>" pattern="\d{10}" title="Please enter exactly 10 digits" required>
                 </div>
 
@@ -394,7 +394,6 @@ try {
     </div>
 
     <script>
-        // Validate end date is after start date
         document.getElementById('start_date').addEventListener('change', function() {
             document.getElementById('end_date').min = this.value;
         });

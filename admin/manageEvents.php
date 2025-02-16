@@ -107,7 +107,7 @@ unset($_SESSION['error_message']);
             gap: 5px;
         }
 
-        .view-btn{
+        .view-btn {
             padding: 6px 12px;
             background-color: rgb(134, 104, 223);
             color: white;
@@ -117,6 +117,7 @@ unset($_SESSION['error_message']);
             text-decoration: none;
             font-size: 14px;
         }
+
         .edit-btn {
             padding: 6px 12px;
             background-color: rgb(81, 64, 179);
@@ -256,10 +257,17 @@ unset($_SESSION['error_message']);
                                         <i class="fas fa-eye"></i>
                                     </a>
 
-                                    <a href="editEvent.php?id=<?php echo $event['id']; ?>" class="action-btn edit-btn">
-                                        <i class="fas fa-pen"></i>
-                                    </a>
-
+                                    <?php
+                                    if ($event['end_date'] >= date('Y-m-d')):
+                                    ?>
+                                        <a href="editEvent.php?id=<?php echo $event['id']; ?>" class="action-btn edit-btn">
+                                            <i class="fas fa-pen"></i>
+                                        </a>
+                                    <?php else: ?>
+                                        <a href="#" class="action-btn edit-btn disabled" style="pointer-events: none; opacity: 0.5;">
+                                            <i class="fas fa-pen"></i>
+                                        </a>
+                                    <?php endif; ?>
                                     <form method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this event?');">
                                         <input type="hidden" name="action" value="delete">
                                         <input type="hidden" name="event_id" value="<?php echo $event['id']; ?>">

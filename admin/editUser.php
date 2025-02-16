@@ -231,7 +231,7 @@ $user = $result->fetch_assoc();
             <form action="" method="POST" onsubmit="return validateForm()">
                 <div class="form-group">
                     <label for="username">Username*</label>
-                    <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($user['username']); ?>" required pattern="[A-Za-z\s]+" title="Username should only contain letters and spaces">
+                    <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($user['username']); ?>" required pattern="[A-Za-z_]+" title="Username should only contain letters and underscores">
                 </div>
 
                 <div class="form-group">

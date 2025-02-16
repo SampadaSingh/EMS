@@ -2,7 +2,6 @@
 include '../config/connect.php';
 session_start();
 
-// Check if user is logged in and is an organizer
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'organizer') {
     header('Location: ../php/login.php');
     exit();
@@ -13,7 +12,6 @@ $success_message = '';
 $error_message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Get form data with null coalescing operator
     $event_title = $_POST['event_title'] ?? '';
     $event_venue = $_POST['event_venue'] ?? '';
     $event_location = $_POST['event_location'] ?? '';
@@ -27,7 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $event_description = $_POST['event_description'] ?? '';
     $event_image = $_FILES['event_image'] ?? null;
 
-    // Validate required fields
     if (empty($event_title) || empty($event_venue) || empty($event_location) ||
         empty($start_time) || empty($end_time) || empty($start_date) || empty($end_date) ||
         empty($organizer_name) || empty($organizer_contact) || empty($event_description)) {
@@ -60,7 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        // If no errors, proceed with database insertion
         if (empty($error_message)) {
             $query = "INSERT INTO events (
                 event_title, event_venue, event_location, start_time, end_time,
@@ -234,22 +230,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const organizerContact = document.getElementById('organizer_contact').value;
             const eventTitle = document.getElementById('event_title').value;
 
-            // Name validation (no numbers allowed)
+            //organizer name
             const nameRegex = /^[A-Za-z\s]+$/;
             if (!nameRegex.test(organizerName)) {
                 alert('Organizer name should only contain letters and spaces');
                 return false;
             }
 
-            // Phone number validation (exactly 10 digits)
+            // Phone number
             const phoneRegex = /^\d{10}$/;
             if (!phoneRegex.test(organizerContact)) {
                 alert('Contact number must be exactly 10 digits');
                 return false;
             }
 
-            // Event title validation (alphanumeric and spaces only)
-            const titleRegex = /^[A-Za-z0-9\s]+$/;
+            // Event title
+            const titleRegex = /^[A-Za-z0-9\s'-]+$/;
             if (!titleRegex.test(eventTitle)) {
                 alert('Event title should only contain letters, numbers, and spaces');
                 return false;
@@ -316,12 +312,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
 
                 <div class="form-group">
-                    <label for="organizer_name">Organizer Name* (letters only)</label>
+                    <label for="organizer_name">Organizer Name*</label>
                     <input type="text" id="organizer_name" name="organizer_name" pattern="[A-Za-z\s]+" title="Only letters and spaces allowed" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="organizer_contact">Organizer Contact* (10 digits)</label>
+                    <label for="organizer_contact">Organizer Contact*</label>
                     <input type="tel" id="organizer_contact" name="organizer_contact" pattern="\d{10}" title="Please enter exactly 10 digits" required>
                 </div>
             </div>

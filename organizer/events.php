@@ -19,6 +19,7 @@ $result = $stmt->get_result();
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -54,7 +55,6 @@ $result = $stmt->get_result();
         .create-btn:hover {
             transform: translateY(-2px);
         }
-
 
         .events-grid {
             display: grid;
@@ -138,15 +138,17 @@ $result = $stmt->get_result();
         }
 
         .view-btn {
-            background-color: #5D5FEF;
+            background-color: #433D8B;
         }
 
         .edit-btn {
-            background-color: #6C757D;
+            background-color:rgb(76, 74, 78);
+            align-content: center;
         }
 
         .delete-btn {
             background-color: #DC3545;
+            align-content: center;
         }
 
         .action-btn:hover {
@@ -174,7 +176,8 @@ $result = $stmt->get_result();
                 width: 60px;
             }
 
-            .sidebar h2, .menu-item span {
+            .sidebar h2,
+            .menu-item span {
                 display: none;
             }
 
@@ -189,6 +192,7 @@ $result = $stmt->get_result();
         }
     </style>
 </head>
+
 <body>
     <?php include 'sidebar.php'; ?>
 
@@ -202,13 +206,11 @@ $result = $stmt->get_result();
         </div>
 
         <?php
-        // Display success message if set
         if (isset($_SESSION['success_message'])) {
             echo '<div class="success-message">' . htmlspecialchars($_SESSION['success_message']) . '</div>';
             unset($_SESSION['success_message']);
         }
 
-        // Display error message if set
         if (isset($_SESSION['error_message'])) {
             echo '<div class="error-message">' . htmlspecialchars($_SESSION['error_message']) . '</div>';
             unset($_SESSION['error_message']);
@@ -220,13 +222,13 @@ $result = $stmt->get_result();
                 <?php while ($event = $result->fetch_assoc()): ?>
                     <div class="event-card">
                         <div class="event-image"></div>
-                        
+
                         <h2 class="event-title"><?php echo htmlspecialchars($event['event_title']); ?></h2>
-                        
+
                         <div class="description">
                             <?php echo htmlspecialchars($event['event_description']); ?>
                         </div>
-                        
+
                         <div class="date-info">
                             <div class="date-item">
                                 <span class="date-label">Start Date:</span>
@@ -237,10 +239,18 @@ $result = $stmt->get_result();
                                 <span class="date-value"><?php echo date('F j, Y', strtotime($event['end_date'])); ?></span>
                             </div>
                         </div>
-                        
+
                         <div class="event-actions">
                             <a href="viewParticipants.php?event_id=<?php echo urlencode($event['id']); ?>&event_title=<?php echo urlencode($event['event_title']); ?>" class="action-btn view-btn">View Participants</a>
-                            <a href="editEvent.php?id=<?php echo urlencode($event['id']); ?>" class="action-btn edit-btn">Edit</a>
+
+                            <?php
+                            if ($event['end_date'] >= date('Y-m-d')):
+                            ?>
+                                <a href="editEvent.php?id=<?php echo urlencode($event['id']); ?>" class="action-btn edit-btn">Edit</a>
+                            <?php else: ?>
+                                <a href="#" class="action-btn edit-btn" style="opacity: 0.5; cursor: not-allowed;">Edit</a>
+                            <?php endif; ?>
+
                             <a href="deleteEvent.php?event_id=<?php echo urlencode($event['id']); ?>" class="action-btn delete-btn" onclick="return confirm('Are you sure you want to delete this event? This action cannot be undone.');">Delete</a>
                         </div>
                     </div>
@@ -257,4 +267,5 @@ $result = $stmt->get_result();
         </div>
     </div>
 </body>
+
 </html>
