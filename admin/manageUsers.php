@@ -54,7 +54,7 @@ $users = $conn->query("SELECT * FROM users ORDER BY id ASC");
         }
 
         .header h1 {
-            color: #2c3e50;
+            color: #2e236c;
             font-size: 24px;
         }
 
@@ -80,7 +80,7 @@ $users = $conn->query("SELECT * FROM users ORDER BY id ASC");
 
         th {
             background-color: #f8f9fa;
-            color: #2c3e50;
+            color: #2e236c;
             font-weight: 600;
         }
 

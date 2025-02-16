@@ -56,7 +56,7 @@ unset($_SESSION['error_message']);
         }
 
         .header h1 {
-            color: #2c3e50;
+            color: #2e236c;
             font-size: 24px;
         }
 
@@ -98,7 +98,7 @@ unset($_SESSION['error_message']);
 
         th {
             background-color: #f8f9fa;
-            color: #2c3e50;
+            color: #2e236c;
             font-weight: 600;
         }
 
@@ -109,7 +109,7 @@ unset($_SESSION['error_message']);
 
         .view-btn {
             padding: 6px 12px;
-            background-color: rgb(134, 104, 223);
+            background-color: rgb(104, 74, 194);
             color: white;
             border: none;
             border-radius: 3px;
@@ -120,7 +120,7 @@ unset($_SESSION['error_message']);
 
         .edit-btn {
             padding: 6px 12px;
-            background-color: rgb(81, 64, 179);
+            background-color: rgb(76, 74, 78);
             color: white;
             border: none;
             border-radius: 3px;
@@ -264,7 +264,7 @@ unset($_SESSION['error_message']);
                                             <i class="fas fa-pen"></i>
                                         </a>
                                     <?php else: ?>
-                                        <a href="#" class="action-btn edit-btn disabled" style="pointer-events: none; opacity: 0.5;">
+                                        <a href="#" class="action-btn edit-btn disabled" style="pointer-events: none; opacity: 0.3;">
                                             <i class="fas fa-pen"></i>
                                         </a>
                                     <?php endif; ?>

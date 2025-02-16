@@ -1,5 +1,6 @@
 <?php
 include '../config/connect.php';
+include 'sidebar.php';
 
 // Get event ID from URL
 if (!isset($_GET['id'])) {
@@ -73,7 +74,7 @@ $event = $result->fetch_assoc();
             text-decoration: none;
             border-radius: 5px;
             margin-top: 20px;
-            margin-left: 300px;
+            margin-left: 160px;
         }
     </style>
 </head>
