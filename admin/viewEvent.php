@@ -58,6 +58,8 @@ $event = $result->fetch_assoc();
         }
         .event-details {
             padding: 20px;
+            display: flex;
+            flex-direction: column;
         }
         .detail-item {
             margin-bottom: 10px;
@@ -74,7 +76,7 @@ $event = $result->fetch_assoc();
             text-decoration: none;
             border-radius: 5px;
             margin-top: 20px;
-            margin-left: 160px;
+            margin: 20px auto 0 auto;
         }
     </style>
 </head>
