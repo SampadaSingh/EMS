@@ -266,10 +266,8 @@ $event = $result->fetch_assoc();
                     <input type="number" id="event_fee" name="event_fee" min="0" step="0.01" value="<?php echo $event['event_fee']; ?>" required>
                 </div>
 
+                <!--buttons-->
                 <div class="btn-container">
-<<<<<<< HEAD
-                    <button type="submit" class="submit-btn">Update Event</button>
-=======
                     <button type="submit" class="submit-btn" onclick="return showSuccessMessage()">Update Event</button>
                     <script>
                         function showSuccessMessage() {
@@ -278,7 +276,6 @@ $event = $result->fetch_assoc();
                             return false;
                         }
                     </script>
->>>>>>> 35c50b2181201842ad287125b5186f3ca040c14f
                     <a href="manageEvents.php" class="cancel-btn">Cancel</a>
                 </div>
             </form>

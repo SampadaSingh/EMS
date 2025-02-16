@@ -32,6 +32,7 @@ unset($_SESSION['error_message']);
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -51,7 +52,7 @@ unset($_SESSION['error_message']);
             padding: 20px;
             border-radius: 10px;
             margin-bottom: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .header h1 {
@@ -79,7 +80,7 @@ unset($_SESSION['error_message']);
             background-color: white;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             overflow-x: auto;
         }
 
@@ -88,7 +89,8 @@ unset($_SESSION['error_message']);
             border-collapse: collapse;
         }
 
-        th, td {
+        th,
+        td {
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid #ddd;
@@ -105,6 +107,16 @@ unset($_SESSION['error_message']);
             gap: 5px;
         }
 
+        .view-btn{
+            padding: 6px 12px;
+            background-color: rgb(134, 104, 223);
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+        }
         .edit-btn {
             padding: 6px 12px;
             background-color: rgb(81, 64, 179);
@@ -186,6 +198,7 @@ unset($_SESSION['error_message']);
         }
     </style>
 </head>
+
 <body>
     <?php include 'sidebar.php'; ?>
 
@@ -224,34 +237,44 @@ unset($_SESSION['error_message']);
                 </thead>
                 <tbody>
                     <?php while ($event = $events->fetch_assoc()): ?>
-                    <tr>
-                        <td><?php echo $event['id']; ?></td>
-                        <td><?php echo $event['event_title']; ?></td>
-                        <td><?php echo $event['event_venue']; ?></td>
-                        <td><?php echo $event['event_location']; ?></td>
-                        <td class="time-cell"><?php echo date('h:i A', strtotime($event['start_time'])); ?></td>
-                        <td class="time-cell"><?php echo date('h:i A', strtotime($event['end_time'])); ?></td>
-                        <td class="date-cell"><?php echo date('M d, Y', strtotime($event['start_date'])); ?></td>
-                        <td class="date-cell"><?php echo date('M d, Y', strtotime($event['end_date'])); ?></td>
-                        <td class="description-cell"><?php echo substr($event['event_description'], 0, 100) . '...'; ?></td>
-                        <td><?php echo $event['organizer_name']; ?></td>
-                        <td><?php echo $event['organizer_contact']; ?></td>
-                        <td>Rs. <?php echo number_format($event['event_fee'], 2); ?></td>
-                        <td>
-                            <div class="action-buttons">
-                                <a href="editEvent.php?id=<?php echo $event['id']; ?>" class="edit-btn">Edit</a>
-                                <form method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this event?');">
-                                    <input type="hidden" name="action" value="delete">
-                                    <input type="hidden" name="event_id" value="<?php echo $event['id']; ?>">
-                                    <button type="submit" class="delete-btn">Delete</button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td><?php echo $event['id']; ?></td>
+                            <td><?php echo $event['event_title']; ?></td>
+                            <td><?php echo $event['event_venue']; ?></td>
+                            <td><?php echo $event['event_location']; ?></td>
+                            <td class="time-cell"><?php echo date('h:i A', strtotime($event['start_time'])); ?></td>
+                            <td class="time-cell"><?php echo date('h:i A', strtotime($event['end_time'])); ?></td>
+                            <td class="date-cell"><?php echo date('M d, Y', strtotime($event['start_date'])); ?></td>
+                            <td class="date-cell"><?php echo date('M d, Y', strtotime($event['end_date'])); ?></td>
+                            <td class="description-cell"><?php echo substr($event['event_description'], 0, 100) . '...'; ?></td>
+                            <td><?php echo $event['organizer_name']; ?></td>
+                            <td><?php echo $event['organizer_contact']; ?></td>
+                            <td>Rs. <?php echo number_format($event['event_fee'], 2); ?></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a href="viewEvent.php?id=<?php echo $event['id']; ?>" class="action-btn view-btn">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+
+                                    <a href="editEvent.php?id=<?php echo $event['id']; ?>" class="action-btn edit-btn">
+                                        <i class="fas fa-pen"></i>
+                                    </a>
+
+                                    <form method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this event?');">
+                                        <input type="hidden" name="action" value="delete">
+                                        <input type="hidden" name="event_id" value="<?php echo $event['id']; ?>">
+                                        <button type="submit" class="action-btn delete-btn">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
                     <?php endwhile; ?>
                 </tbody>
             </table>
         </div>
     </div>
 </body>
+
 </html>
