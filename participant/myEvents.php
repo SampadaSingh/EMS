@@ -37,7 +37,11 @@ switch ($status) {
     case 'ongoing':
         $query .= " AND CURDATE() BETWEEN e.start_date AND e.end_date";
         break;
+    case 'all':
+    default:
+        break;
 }
+
 
 $query .= " ORDER BY e.start_date ASC";
 
