@@ -15,7 +15,7 @@ $status = $_GET['status'] ?? 'upcoming';
 
 $query = "SELECT e.*, p.created_at as registration_date 
           FROM events e 
-          JOIN participants p ON e.event_title = p.event_title 
+          JOIN participants p ON e.id = p.event_id 
           WHERE p.p_email = ?";
 $params = [$participant_email];
 $types = "s";
@@ -234,6 +234,7 @@ $result = $stmt->get_result();
                     <div class="filter-group">
                         <label for="status">Event Status</label>
                         <select id="status" name="status">
+                            <option value="all" <?php echo ($status === 'all') ? 'selected' : ''; ?>>All Events</option>
                             <option value="upcoming" <?php echo ($status === 'upcoming') ? 'selected' : ''; ?>>Upcoming Events</option>
                             <option value="ongoing" <?php echo ($status === 'ongoing') ? 'selected' : ''; ?>>Ongoing Events</option>
                             <option value="past" <?php echo ($status === 'past') ? 'selected' : ''; ?>>Past Events</option>
@@ -253,9 +254,12 @@ $result = $stmt->get_result();
                             } elseif (strtotime($event['start_date']) > time()) {
                                 $event_status = 'Upcoming Event';
                                 $status_class = 'status-upcoming';
-                            } else {
+                            } elseif (strtotime($event['start_date']) <= time() && strtotime($event['end_date']) >= time()) {
                                 $event_status = 'Ongoing Event';
                                 $status_class = 'status-ongoing';
+                            }else{
+                                $event_status = 'Unknown';
+                                $status_class = 'status-unknown';
                             }
                         ?>
                             <div class="event-card">

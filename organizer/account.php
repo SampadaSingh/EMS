@@ -2,7 +2,6 @@
 include '../config/connect.php';
 session_start();
 
-// Check if user is logged in and is an organizer
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'organizer') {
     header('Location: ../php/login.php');
     exit();
@@ -12,14 +11,13 @@ $organizer_id = $_SESSION['user_id'];
 $success_message = '';
 $error_message = '';
 
-// Initialize default values
+// default
 $user = [
     'full_name' => '',
     'email' => '',
     'phone' => ''
 ];
 
-// Fetch current user data
 $query = "SELECT full_name, email, phone FROM users WHERE id = ? AND role = 'organizer'";
 if ($stmt = $conn->prepare($query)) {
     $stmt->bind_param("i", $organizer_id);
@@ -36,7 +34,6 @@ if ($stmt = $conn->prepare($query)) {
     $error_message = "Database error. Please try again later.";
 }
 
-// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $full_name = isset($_POST['full_name']) ? trim($_POST['full_name']) : '';
     $email = isset($_POST['email']) ? trim($_POST['email']) : '';
@@ -45,14 +42,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $new_password = isset($_POST['new_password']) ? $_POST['new_password'] : '';
     $confirm_password = isset($_POST['confirm_password']) ? $_POST['confirm_password'] : '';
 
-    // Validate inputs
     if (empty($full_name) || empty($email) || empty($phone)) {
         $error_message = "Name, email, and phone are required fields.";
     } else {
-        // Start transaction
         $conn->begin_transaction();
         try {
-            // Update basic info
             $update_query = "UPDATE users SET full_name = ?, email = ?, phone = ? WHERE id = ? AND role = 'organizer'";
             if ($update_stmt = $conn->prepare($update_query)) {
                 $update_stmt->bind_param("sssi", $full_name, $email, $phone, $organizer_id);
@@ -62,7 +56,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new Exception("Error updating profile information.");
             }
 
-            // Handle password change if requested
             if (!empty($current_password)) {
                 // Verify current password
                 $verify_query = "SELECT password FROM users WHERE id = ? AND role = 'organizer'";
@@ -105,7 +98,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
 
-            // Commit transaction
             $conn->commit();
             $success_message = "Profile updated successfully!";
 
