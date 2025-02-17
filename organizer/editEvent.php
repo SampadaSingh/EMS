@@ -2,7 +2,6 @@
 include '../config/connect.php';
 session_start();
 
-// Check if user is logged in and is an organizer
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'organizer') {
     header('Location: ../php/login.php');
     exit();
@@ -14,7 +13,6 @@ $error_message = '';
 $success_message = '';
 
 try {
-    // Fetch event details
     $stmt = $conn->prepare("SELECT * FROM events WHERE id = ? AND organizer_id = ?");
     $stmt->bind_param("ii", $event_id, $organizer_id);
     $stmt->execute();
@@ -29,7 +27,6 @@ try {
     $event = $result->fetch_assoc();
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        // Validate required fields
         if (
             empty($_POST['event_title']) || empty($_POST['event_venue']) || empty($_POST['event_location']) ||
             empty($_POST['start_time']) || empty($_POST['end_time']) || empty($_POST['start_date']) ||
@@ -50,36 +47,16 @@ try {
             $event_fee = $_POST['event_fee'] ?? 0;
 
             // Handle image upload
-            $image_path = $event['event_image'];
+            if (!empty($_FILES['event_image']['name'])) {
+                $image_name = basename($_FILES['event_image']['name']);
+                $target_path = "../assets/uploads/" . $image_name;
 
-            if (isset($_FILES['event_image']) && $_FILES['event_image']['error'] === 0) {
-                $allowed_types = ['image/jpeg', 'image/png', 'image/jpg'];
-                $file_type = $_FILES['event_image']['type'];
-
-                if (!in_array($file_type, $allowed_types)) {
-                    $error_message = "Only JPG, JPEG & PNG files are allowed.";
+                if (move_uploaded_file($_FILES['event_image']['tmp_name'], $target_path)) {
+                    $image_name = basename($_FILES['event_image']['name']);
                 } else {
-                    $file_name = uniqid('IMG-', true) . '-' . basename($_FILES['event_image']['name']);
-                    $upload_dir = '../uploads/';
-
-                    if (!is_dir($upload_dir)) {
-                        mkdir($upload_dir, 0777, true);
-                    }
-
-                    $upload_path = $upload_dir . $file_name;
-
-                    if (move_uploaded_file($_FILES['event_image']['tmp_name'], $upload_path)) {
-                        if ($event['event_image'] && file_exists($upload_dir . $event['event_image'])) {
-                            unlink($upload_dir . $event['event_image']);
-                        }
-
-                        $image_path = $file_name;
-                    } else {
-                        $error_message = "Failed to upload image.";
-                    }
+                    $error_message = "Error uploading image.";
                 }
             }
-
 
             if (empty($error_message)) {
                 // Update event in database
@@ -104,7 +81,7 @@ try {
                     $organizer_name,
                     $organizer_contact,
                     $event_description,
-                    $image_path,
+                    $image_name,
                     $event_id,
                     $organizer_id
                 );
@@ -303,12 +280,6 @@ try {
                 return false;
             }
 
-            const titleRegex = /^[A-Za-z0-9\s]+$/;
-            if (!titleRegex.test(eventTitle)) {
-                alert('Event title should only contain letters, numbers, and spaces');
-                return false;
-            }
-
             return true;
         }
     </script>
@@ -334,7 +305,7 @@ try {
             <div class="form-grid">
                 <div class="form-group">
                     <label for="event_title">Event Title*</label>
-                    <input type="text" id="event_title" name="event_title" value="<?php echo htmlspecialchars($event['event_title']); ?>" pattern="[A-Za-z0-9\s]+" title="Only letters, numbers, and spaces allowed" required>
+                    <input type="text" id="event_title" name="event_title" value="<?php echo htmlspecialchars($event['event_title']); ?>"pattern="[A-Za-z0-9\s'-:]+" title="Only letters, numbers, spaces, hyphens, apostrophes, and colons allowed" required>
                 </div>
 
                 <div class="form-group">

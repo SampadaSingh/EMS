@@ -73,6 +73,7 @@
     text-align: center;
 }
 
+
 .calendar h3 {
     margin-bottom: 10px;
     font-size: 18px;
@@ -127,4 +128,16 @@ $current_page = basename($_SERVER['PHP_SELF']);
     </div>
     
 </body>
+<script>        
+function updateCalendar() {
+            const options = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            };
+            const today = new Date().toLocaleDateString('en-US', options);
+            document.getElementById('currentDate').innerText = today;
+        }
+        updateCalendar();
+</script>
 </html>

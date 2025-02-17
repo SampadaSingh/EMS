@@ -221,7 +221,9 @@ $result = $stmt->get_result();
             <?php if ($result->num_rows > 0): ?>
                 <?php while ($event = $result->fetch_assoc()): ?>
                     <div class="event-card">
-                        <div class="event-image"></div>
+                        <div class="event-image" style="background-image: url('../assets/uploads/<?php echo htmlspecialchars($event['event_image']) ?: 'event-default.png'; ?>');">
+
+                        </div>
 
                         <h2 class="event-title"><?php echo htmlspecialchars($event['event_title']); ?></h2>
 
@@ -242,7 +244,7 @@ $result = $stmt->get_result();
 
                         <div class="event-actions">
                             <a href="viewParticipants.php?event_id=<?php echo urlencode($event['id']); ?>&event_title=<?php echo urlencode($event['event_title']); ?>" class="action-btn view-btn">View Participants</a>
-
+                            
                             <?php
                             if ($event['end_date'] >= date('Y-m-d')):
                             ?>
