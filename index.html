@@ -1,62 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/index.css">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-  <title>Event Management System</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>index- Event Management System</title>
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-  <div class="header">
-    <a href="php/login.php" class="login">Login</a>
-    <a href="php/signup.php" class="signup">Sign Up</a>
-  </div>
+    <nav class="navbar">
+        <div class="logo">EMS</div>
+        <div class="auth-buttons">
+            <a href="php/login.php"><button class="login-btn">Login</button></a>
+            <a href="php/signup.php"><button class="register-btn">Signup</button></a>
+        </div>
+    </nav>
 
-  <div class="main">
-    <h1><strong>Event Management System</strong></h1>
-    <p>Organize, manage, and track events effortlessly with our system</p>
-    <div class="card-container">
-      <div class="card">
-        <div class="photo">
-          <img src="assets/uploads/i1.jpg" alt="Photo 1">
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Transform Your Events Into Experiences</h1>
+            <p>Organize, manage, and track events effortlessly with our system</p>
         </div>
-        <div class="text">
+        <div class="hero-images">
+            <div class="image-grid">
+                <div class="image-container main-image">
+                    <img src="assets/img/eventplan.jfif" alt="Event Planning">
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="image-container top-image">
+                    <img src="assets/img/eventcollab.jfif" alt="Event Collaboration">
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="image-container bottom-image">
+                    <img src="assets/img/eventsuccess.jfif" alt="Event Success">
+                    <div class="image-overlay"></div>
+                </div>
+            </div>
         </div>
-        <div class="text"></div>
-      </div>
-      <div class="card">
-        <div class="photo">
-          <img src="assets/uploads/i2.jpg" alt="Photo 2">
-        </div>
-        <div class="text"></div>
-        <div class="text"></div>
-      </div>
-      <div class="card">
-        <div class="photo">
-          <img src="assets/uploads/i3.jpg" alt="Photo 3">
-        </div>
-        <div class="text"></div>
-        <div class="text"></div>
-      </div>
-    </div>
-  </div>
+    </section>
 
-  <footer class="footer">
-    <div class="footer-left">
-      <h3>Let's Talk</h3>
-      <p>A place for organizing all your events</p>
-    </div>
-    <div class="footer-right">
-      <ul>
-        <li><strong>Email:</strong> <a href="ems@gmail.com"><i class="fas fa-envelope"></i> ems@gmail.com</a></li>
-        <li><strong>Phone:</strong> <a href="tel:+0123456789"><i class="fas fa-phone"></i> (+977)0123456789</a></li>
-        <li><strong>Address:</strong> <a href="#"><i class="fas fa-map-marker-alt"></i> Ekantakuna, Lalitpur</a></li>
-      </ul>
-    </div>
-    <div class="footer-center">
-      <p>&copy; 2024 Event Management System. All Rights Reserved.</p>
-    </div>
-  </footer>
+    <section class="services">
+        <div class="container">
+            <h2 class="section-title">Our Services</h2>
+            
+            <div class="grid">
+                <div class="card">
+                    <div class="icon">🎭</div>
+                    <h3 class="feature-title">Corporate Events</h3>
+                    <p class="feature-description">Professional planning for conferences, seminars, and team building events</p>
+                </div>
+                <div class="card">
+                    <div class="icon">🎪</div>
+                    <h3 class="feature-title">College Fest</h3>
+                    <p class="feature-description">Organize vibrant college festivals with comprehensive event management</p>
+                </div>
+                <div class="card">
+                    <div class="icon">🎨</div>
+                    <h3 class="feature-title">Cultural Programs</h3>
+                    <p class="feature-description">Create spectacular cultural shows, performances, and artistic events</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>EMS</h3>
+                <p>Making event management simple and efficient</p>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 EMS. All rights reserved.</p>
+        </div>
+    </footer>
 </body>
 </html>
