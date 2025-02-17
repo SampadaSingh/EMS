@@ -61,32 +61,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // img
         $image_path = '';
         $error_message = '';
-        
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['event_image'])) {
-        
+
             $event_image = $_FILES['event_image'];
-        
+
             if ($event_image['error'] === UPLOAD_ERR_OK) {
-        
+
                 $allowed_types = ['image/jpeg', 'image/png', 'image/jpg'];
                 $file_type = $event_image['type'];
-        
+
                 if (!in_array($file_type, $allowed_types)) {
                     $error_message = "Only JPG, JPEG & PNG files are allowed.";
                 } else {
-                    $max_file_size = 2 * 1024 * 1024; 
+                    $max_file_size = 2 * 1024 * 1024;
                     if ($event_image['size'] > $max_file_size) {
                         $error_message = "File size exceeds 2MB.";
                     } else {
-                        $file_name = uniqid('IMG-', true) . '-' . basename($event_image['name']);
-                        $upload_dir = 'uploads/'; 
-        
+                        $file_name = basename($event_image['name']); // Keep original file name
+                        $upload_dir = 'uploads/';
+
                         if (!is_dir($upload_dir)) {
                             mkdir($upload_dir, 0777, true);
                         }
-        
+
                         $upload_path = $upload_dir . $file_name;
-        
+
+                        // Check if file already exists and rename it to prevent overwriting
+                        $file_counter = 1;
+                        $file_extension = pathinfo($file_name, PATHINFO_EXTENSION);
+                        $file_base_name = pathinfo($file_name, PATHINFO_FILENAME);
+
+                        while (file_exists($upload_path)) {
+                            $file_name = $file_base_name . "_$file_counter." . $file_extension;
+                            $upload_path = $upload_dir . $file_name;
+                            $file_counter++;
+                        }
+
                         if (move_uploaded_file($event_image['tmp_name'], $upload_path)) {
                             $image_path = $file_name;
                         } else {
@@ -98,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $error_message = "Error occurred during image upload.";
             }
         }
-        
+
 
         if (empty($error_message)) {
             $query = "INSERT INTO events (
