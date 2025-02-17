@@ -32,81 +32,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ) {
         $error_message = "All fields are required except event fee and image.";
     } else {
-        /*Handle image upload
-        $image_path = '';
-        if ($event_image && $event_image['error'] === UPLOAD_ERR_OK) {
-            $allowed_types = ['image/jpeg', 'image/png', 'image/jpg'];
-            $file_type = $event_image['type'];
+        /*Handle image upload*/
+        $image_name = null;
+        if ($event_image) {
+            $image_name = basename($event_image['name']);
+            $target_path = '../assets/uploads/' . $image_name;
 
-            if (!in_array($file_type, $allowed_types)) {
-                $error_message = "Only JPG, JPEG & PNG files are allowed.";
-            } else {
-                $file_name = uniqid() . '_' . basename($event_image['name']);
-                $upload_dir = '../uploads/';
-                
-                // Create directory if it doesn't exist
-                if (!file_exists($upload_dir)) {
-                    mkdir($upload_dir, 0777, true);
-                }
-                
-                $upload_path = $upload_dir . $file_name;
-
-                if (move_uploaded_file($event_image['tmp_name'], $upload_path)) {
-                    $image_path = $file_name;
-                } else {
-                    $error_message = "Failed to upload image.";
-                }
-            }
-        }*/
-        // img
-        $image_path = '';
-        $error_message = '';
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['event_image'])) {
-
-            $event_image = $_FILES['event_image'];
-
-            if ($event_image['error'] === UPLOAD_ERR_OK) {
-
-                $allowed_types = ['image/jpeg', 'image/png', 'image/jpg'];
-                $file_type = $event_image['type'];
-
-                if (!in_array($file_type, $allowed_types)) {
-                    $error_message = "Only JPG, JPEG & PNG files are allowed.";
-                } else {
-                    $max_file_size = 2 * 1024 * 1024;
-                    if ($event_image['size'] > $max_file_size) {
-                        $error_message = "File size exceeds 2MB.";
-                    } else {
-                        $file_name = basename($event_image['name']); // Keep original file name
-                        $upload_dir = 'uploads/';
-
-                        if (!is_dir($upload_dir)) {
-                            mkdir($upload_dir, 0777, true);
-                        }
-
-                        $upload_path = $upload_dir . $file_name;
-
-                        // Check if file already exists and rename it to prevent overwriting
-                        $file_counter = 1;
-                        $file_extension = pathinfo($file_name, PATHINFO_EXTENSION);
-                        $file_base_name = pathinfo($file_name, PATHINFO_FILENAME);
-
-                        while (file_exists($upload_path)) {
-                            $file_name = $file_base_name . "_$file_counter." . $file_extension;
-                            $upload_path = $upload_dir . $file_name;
-                            $file_counter++;
-                        }
-
-                        if (move_uploaded_file($event_image['tmp_name'], $upload_path)) {
-                            $image_path = $file_name;
-                        } else {
-                            $error_message = "Failed to upload image.";
-                        }
-                    }
-                }
-            } else {
-                $error_message = "Error occurred during image upload.";
+            if (!move_uploaded_file($event_image['tmp_name'], $target_path)) {
+                $error_message = "Error uploading image";
             }
         }
 
@@ -135,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $organizer_name,
                         $organizer_contact,
                         $event_description,
-                        $image_path,
+                        $image_name,
                         $organizer_id
                     );
 
@@ -301,7 +234,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             // Event title
-            const titleRegex = /^[A-Za-z0-9\s'-]+$/;
+            const titleRegex = /^[A-Za-z0-9\s'-:]+$/;
             if (!titleRegex.test(eventTitle)) {
                 alert('Event title should only contain letters, numbers, and spaces');
                 return false;
@@ -330,7 +263,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="form-grid">
                 <div class="form-group">
                     <label for="event_title">Event Title*</label>
-                    <input type="text" id="event_title" name="event_title" pattern="[A-Za-z0-9\s'-]+" title="Only letters, numbers, and spaces allowed" required>
+                    <input type="text" id="event_title" name="event_title" pattern="[A-Za-z0-9\s'-:]+" title="Only letters, numbers, spaces, hyphens, apostrophes, and colons allowed" required>
                 </div>
 
                 <div class="form-group">
