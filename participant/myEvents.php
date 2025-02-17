@@ -273,7 +273,9 @@ $result = $stmt->get_result();
                         ?>
                             <div class="event-card">
                                 <?php if ($event['event_image']): ?>
-                                    <img src="<?php echo htmlspecialchars($event['event_image']); ?>" alt="<?php echo htmlspecialchars($event['event_title']); ?>" class="event-image">
+                                    <img src="../assets/uploads/<?php echo htmlspecialchars($event['event_image']); ?>"
+                                    alt="<?php echo htmlspecialchars($event['event_title']); ?>"
+                                    class="event-image">
                                 <?php endif; ?>
                                 <div class="event-details">
                                     <h3 class="event-title"><?php echo htmlspecialchars($event['event_title']); ?></h3>
