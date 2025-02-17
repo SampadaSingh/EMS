@@ -11,11 +11,11 @@ $participant_id = $_SESSION['user_id'];
 $participant_email = $_SESSION['email'];
 
 $search = $_GET['search'] ?? '';
-$status = $_GET['status'] ?? 'upcoming'; 
+$status = $_GET['status'] ?? 'upcoming';
 
 $query = "SELECT e.*, p.created_at as registration_date 
           FROM events e 
-          JOIN participants p ON e.event_title = p.event_title 
+          JOIN participants p ON e.id = p.event_id 
           WHERE p.p_email = ?";
 $params = [$participant_email];
 $types = "s";
@@ -37,7 +37,11 @@ switch ($status) {
     case 'ongoing':
         $query .= " AND CURDATE() BETWEEN e.start_date AND e.end_date";
         break;
+    case 'all':
+    default:
+        break;
 }
+
 
 $query .= " ORDER BY e.start_date ASC";
 
@@ -51,6 +55,7 @@ $result = $stmt->get_result();
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -91,7 +96,7 @@ $result = $stmt->get_result();
             background: white;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .filter-group {
@@ -122,7 +127,7 @@ $result = $stmt->get_result();
             background: white;
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .event-image {
@@ -203,21 +208,25 @@ $result = $stmt->get_result();
             .sidebar {
                 width: 200px;
             }
+
             .main-content {
                 margin-left: 200px;
             }
+
             .events-grid {
                 grid-template-columns: 1fr;
             }
+
             .filters {
                 flex-direction: column;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="dashboard-layout">
-        
+
         <?php include 'sidebar.php'; ?>
 
         <div class="main-content">
@@ -234,6 +243,7 @@ $result = $stmt->get_result();
                     <div class="filter-group">
                         <label for="status">Event Status</label>
                         <select id="status" name="status">
+                            <option value="all" <?php echo ($status === 'all') ? 'selected' : ''; ?>>All Events</option>
                             <option value="upcoming" <?php echo ($status === 'upcoming') ? 'selected' : ''; ?>>Upcoming Events</option>
                             <option value="ongoing" <?php echo ($status === 'ongoing') ? 'selected' : ''; ?>>Ongoing Events</option>
                             <option value="past" <?php echo ($status === 'past') ? 'selected' : ''; ?>>Past Events</option>
@@ -243,19 +253,22 @@ $result = $stmt->get_result();
 
                 <?php if ($result->num_rows > 0): ?>
                     <div class="events-grid">
-                        <?php while ($event = $result->fetch_assoc()): 
+                        <?php while ($event = $result->fetch_assoc()):
                             $event_status = '';
                             $status_class = '';
-                            
+
                             if (strtotime($event['end_date']) < time()) {
                                 $event_status = 'Past Event';
                                 $status_class = 'status-past';
                             } elseif (strtotime($event['start_date']) > time()) {
                                 $event_status = 'Upcoming Event';
                                 $status_class = 'status-upcoming';
-                            } else {
+                            } elseif (strtotime($event['start_date']) <= time() && strtotime($event['end_date']) >= time()) {
                                 $event_status = 'Ongoing Event';
                                 $status_class = 'status-ongoing';
+                            } else {
+                                $event_status = 'Unknown';
+                                $status_class = 'status-unknown';
                             }
                         ?>
                             <div class="event-card">
@@ -274,7 +287,7 @@ $result = $stmt->get_result();
                                     </p>
                                     <p class="event-info">
                                         <i class="fas fa-clock"></i>
-                                        <?php echo date('g:i A', strtotime($event['start_time'])); ?> - 
+                                        <?php echo date('g:i A', strtotime($event['start_time'])); ?> -
                                         <?php echo date('g:i A', strtotime($event['end_time'])); ?>
                                     </p>
                                     <span class="event-status <?php echo $status_class; ?>">
@@ -297,24 +310,26 @@ $result = $stmt->get_result();
     </div>
 
     <script>
+        let debounceTimer;
+
         document.getElementById('search').addEventListener('input', function() {
-            updateFilters();
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(updateFilters, 1000); 
         });
 
-        document.getElementById('status').addEventListener('change', function() {
-            updateFilters();
-        });
+        document.getElementById('status').addEventListener('change', updateFilters);
 
         function updateFilters() {
             const search = document.getElementById('search').value;
             const status = document.getElementById('status').value;
-            
+
             let url = window.location.pathname + '?';
             if (search) url += 'search=' + encodeURIComponent(search) + '&';
             if (status) url += 'status=' + encodeURIComponent(status);
-            
+
             window.location.href = url;
         }
     </script>
 </body>
+
 </html>

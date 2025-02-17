@@ -277,7 +277,7 @@ $total_registrations = $total_stmt->get_result()->fetch_assoc()['total'];
                         <?php else: ?>
                             <a href="#" class="register-btn disabled">Registration Closed</a>
                         <?php endif; ?>
-                        <a href="events.php" class="back-btn">Back to Events</a>
+                        <a href="myEvents.php" class="back-btn">Back to Events</a>
                     </div>
                 </div>
             </div>
