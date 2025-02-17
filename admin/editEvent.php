@@ -2,7 +2,6 @@
 session_start();
 include '../config/connect.php';
 
-// Get event ID from URL
 if (!isset($_GET['id'])) {
     header('Location: manageEvents.php');
     exit();
@@ -12,6 +11,7 @@ $eventId = $conn->real_escape_string($_GET['id']);
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Escape user inputs
     $title = $conn->real_escape_string($_POST['event_title']);
     $venue = $conn->real_escape_string($_POST['event_venue']);
     $location = $conn->real_escape_string($_POST['event_location']);
@@ -46,6 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
+    // Update SQL query
     $sql = "UPDATE events SET 
             event_title = '$title',
             event_venue = '$venue',
@@ -72,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Get event data
 $result = $conn->query("SELECT * FROM events WHERE id = '$eventId'");
 if ($result->num_rows === 0) {
-    header('Location:   manageEvents.php');
+    header('Location: manageEvents.php');
     exit();
 }
 $event = $result->fetch_assoc();
@@ -268,14 +269,7 @@ $event = $result->fetch_assoc();
 
                 <!--buttons-->
                 <div class="btn-container">
-                    <button type="submit" class="submit-btn" onclick="return showSuccessMessage()">Update Event</button>
-                    <script>
-                        function showSuccessMessage() {
-                            alert("Updated successfully!");
-                            window.location.href = "manageEvents.php";
-                            return false;
-                        }
-                    </script>
+                    <button type="submit" class="submit-btn">Update Event</button>
                     <a href="manageEvents.php" class="cancel-btn">Cancel</a>
                 </div>
             </form>

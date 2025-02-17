@@ -256,7 +256,7 @@ unset($_SESSION['error_message']);
                                     <a href="viewEvent.php?id=<?php echo $event['id']; ?>" class="action-btn view-btn">
                                         <i class="fas fa-eye"></i>
                                     </a>
-
+                                     
                                     <?php
                                     if ($event['end_date'] >= date('Y-m-d')):
                                     ?>
