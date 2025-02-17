@@ -73,7 +73,7 @@
 
                 <div class="input-parent">
                     <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" placeholder="Choose a username (optional)">
+                    <input type="text" id="username" name="username" placeholder="Choose a username (optional)" required pattern="[A-Za-z0-9_]+" title="Username should only contain letters, numbers and underscores">
                 </div>
 
                 <div class="input-parent">

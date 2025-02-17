@@ -190,12 +190,6 @@ $user = $result->fetch_assoc();
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
-            const nameRegex = /^[A-Za-z_]+$/;
-            if (!nameRegex.test(username)) {
-                alert('Username should only contain letters and underscores');
-                return false;
-            }
-
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
                 alert('Please enter a valid email address');
@@ -231,7 +225,7 @@ $user = $result->fetch_assoc();
             <form action="" method="POST" onsubmit="return validateForm()">
                 <div class="form-group">
                     <label for="username">Username*</label>
-                    <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($user['username']); ?>" required pattern="[A-Za-z_]+" title="Username should only contain letters and underscores">
+                    <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($user['username']); ?>" required pattern="[A-Za-z0-9_]+" title="Username should only contain letters, numbers and underscores">
                 </div>
 
                 <div class="form-group">
