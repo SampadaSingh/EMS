@@ -2,19 +2,22 @@
 include '../config/connect.php';
 session_start();
 
-// Check if user is logged in and is an organizer
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'organizer') {
     header('Location: ../php/login.php');
     exit();
 }
 
-$organizer_id = $_SESSION['user_id'];
+$event_id = $_GET['event_id'] ?? '';
 $event_title = $_GET['event_title'] ?? '';
 
-// Verify the event belongs to the organizer
-$event_query = "SELECT * FROM events WHERE event_title = ? AND organizer_id = ?";
+if (!$event_id || !$event_title) {
+    echo "Event ID or Event Title is missing.";
+    exit();
+}
+
+$event_query = "SELECT * FROM events WHERE id = ? AND event_title = ? AND organizer_id = ?";
 $event_stmt = $conn->prepare($event_query);
-$event_stmt->bind_param("si", $event_title, $organizer_id);
+$event_stmt->bind_param("isi", $event_id, $event_title, $_SESSION['user_id']);
 $event_stmt->execute();
 $event_result = $event_stmt->get_result();
 
@@ -25,13 +28,12 @@ if ($event_result->num_rows === 0) {
 
 $event = $event_result->fetch_assoc();
 
-// Fetch participants for this event
 $query = "SELECT p.* FROM participants p 
-          WHERE p.event_title = ?
+          WHERE p.event_id = ?
           ORDER BY p.created_at DESC";
 
 $stmt = $conn->prepare($query);
-$stmt->bind_param("s", $event_title);
+$stmt->bind_param("i", $event_id);
 $stmt->execute();
 $result = $stmt->get_result();
 ?>
