@@ -102,11 +102,11 @@ $current_page = basename($_SERVER['PHP_SELF']);
         </div>
         <div class="menu-item <?php echo $current_page == 'users.php' ? 'active' : ''; ?>">
             <img src="https://img.icons8.com/ios-glyphs/30/ffffff/conference.png" alt="Users">
-            <span><a href="users.php">Manage Users</a></span>
+            <span><a href="manageUsers.php">Manage Users</a></span>
         </div>
         <div class="menu-item <?php echo $current_page == 'events.php' ? 'active' : ''; ?>">
             <img src="https://img.icons8.com/ios-glyphs/30/ffffff/calendar.png" alt="Events">
-            <span><a href="events.php">Manage Events</a></span>
+            <span><a href="manageEvents.php">Manage Events</a></span>
         </div>
         <div class="menu-item <?php echo $current_page == 'reports.php' ? 'active' : ''; ?>">
             <img src="https://img.icons8.com/ios-glyphs/30/ffffff/report-card.png" alt="Reports">
