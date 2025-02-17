@@ -64,29 +64,30 @@
             color: white;
             text-decoration: none;
         }
-        .calendar {
-            margin-top: 230px;
-            padding: 20px;
-            background-color: #2a2679;
-            border-radius: 10px;
-            text-align: center;
-        }
 
-        .calendar h3 {
-            margin-bottom: 10px;
-            font-size: 18px;
-            color: white;
-        }
+.calendar {
+    margin-top: 270px;
+    padding: 20px;
+    background-color: #2a2679;
+    border-radius: 10px;
+    text-align: center;
+}
 
-        .calendar p {
-            color: #ddd;
-            font-size: 14px;
-        }
+.calendar h3 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: white;
+}
 
-        #currentDate {
-            font-size: 14px;
-            color: #ddd;
-        }
+.calendar p {
+    color: #ddd;
+    font-size: 14px;
+}
+
+#currentDate {
+    font-size: 14px;
+    color: #ddd;
+}
 </style>
 </head>
 <body>
@@ -101,11 +102,11 @@ $current_page = basename($_SERVER['PHP_SELF']);
         </div>
         <div class="menu-item <?php echo $current_page == 'users.php' ? 'active' : ''; ?>">
             <img src="https://img.icons8.com/ios-glyphs/30/ffffff/conference.png" alt="Users">
-            <span><a href="manageUsers.php">Manage Users</a></span>
+            <span><a href="users.php">Manage Users</a></span>
         </div>
         <div class="menu-item <?php echo $current_page == 'events.php' ? 'active' : ''; ?>">
             <img src="https://img.icons8.com/ios-glyphs/30/ffffff/calendar.png" alt="Events">
-            <span><a href="manageEvents.php">Manage Events</a></span>
+            <span><a href="events.php">Manage Events</a></span>
         </div>
         <div class="menu-item <?php echo $current_page == 'reports.php' ? 'active' : ''; ?>">
             <img src="https://img.icons8.com/ios-glyphs/30/ffffff/report-card.png" alt="Reports">
@@ -126,16 +127,4 @@ $current_page = basename($_SERVER['PHP_SELF']);
     </div>
     
 </body>
-<script>
-    function updateCalendar() {
-            const options = {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            };
-            const today = new Date().toLocaleDateString('en-US', options);
-            document.getElementById('currentDate').innerText = today;
-        }
-        updateCalendar();
-</script>
 </html>

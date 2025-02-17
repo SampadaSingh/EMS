@@ -160,6 +160,7 @@ try {
         input[type="number"],
         input[type="time"],
         input[type="date"],
+        input[type="tel"],
         textarea {
             width: 100%;
             padding: 10px;
