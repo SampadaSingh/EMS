@@ -2,7 +2,6 @@
 include '../config/connect.php';
 session_start();
 
-// Check if user is logged in and is an organizer
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'organizer') {
     header('Location: ../php/login.php');
     exit();
@@ -10,19 +9,16 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'organizer') {
 
 $organizer_id = $_SESSION['user_id'];
 
-// Get filters
 $search = $_GET['search'] ?? '';
 $event_filter = $_GET['event'] ?? '';
 
-// Base query
-$query = "SELECT p.*, e.start_date, e.end_date, e.event_fee 
+$query = "SELECT p.*, e.id, e.event_title, e.start_date, e.end_date, e.event_fee 
           FROM participants p
-          JOIN events e ON p.event_title = e.event_title
+          JOIN events e ON p.event_id = e.id
           WHERE e.organizer_id = ?";
 $params = [$organizer_id];
 $types = "i";
 
-// Add search filter
 if ($search) {
     $query .= " AND (p.p_name LIKE ? OR p.p_email LIKE ? OR p.p_phone LIKE ?)";
     $search_param = "%$search%";
@@ -30,17 +26,14 @@ if ($search) {
     $types .= "sss";
 }
 
-// Add event filter
 if ($event_filter) {
-    $query .= " AND p.event_title = ?";
+    $query .= " AND p.event_id = ?";
     array_push($params, $event_filter);
-    $types .= "s";
+    $types .= "i";
 }
-
 
 $query .= " ORDER BY p.created_at DESC";
 
-// Prepare and execute query
 $stmt = $conn->prepare($query);
 if (!empty($params)) {
     $stmt->bind_param($types, ...$params);
@@ -48,8 +41,8 @@ if (!empty($params)) {
 $stmt->execute();
 $result = $stmt->get_result();
 
-// Get events for filter dropdown
-$events_query = "SELECT DISTINCT event_title FROM events WHERE organizer_id = ? ORDER BY start_date DESC";
+//filter dropdown
+$events_query = "SELECT DISTINCT id, event_title FROM events WHERE organizer_id = ? ORDER BY start_date DESC";
 $events_stmt = $conn->prepare($events_query);
 $events_stmt->bind_param('i', $organizer_id);
 $events_stmt->execute();
@@ -57,8 +50,10 @@ $events_result = $events_stmt->get_result();
 
 ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -66,7 +61,7 @@ $events_result = $events_stmt->get_result();
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-            .content {
+        .content {
             flex-grow: 1;
             margin-left: 300px;
             padding: 40px;
@@ -101,7 +96,7 @@ $events_result = $events_stmt->get_result();
             background: white;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             margin-bottom: 30px;
         }
 
@@ -149,7 +144,7 @@ $events_result = $events_stmt->get_result();
         .participants-table {
             background: white;
             border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
 
@@ -166,7 +161,8 @@ $events_result = $events_stmt->get_result();
             border-collapse: collapse;
         }
 
-        th, td {
+        th,
+        td {
             padding: 15px;
             text-align: left;
             border-bottom: 1px solid #eee;
@@ -202,7 +198,8 @@ $events_result = $events_stmt->get_result();
                 width: 60px;
             }
 
-            .sidebar h2, .menu-item span {
+            .sidebar h2,
+            .menu-item span {
                 display: none;
             }
 
@@ -217,10 +214,10 @@ $events_result = $events_stmt->get_result();
         }
     </style>
 </head>
+
 <body>
     <?php include('sidebar.php'); ?>
 
-    <!-- Main Content -->
     <div class="content">
         <div class="header">
             <h1>Participants</h1>
@@ -230,19 +227,20 @@ $events_result = $events_stmt->get_result();
             <form class="filter-form" method="GET">
                 <div class="filter-group">
                     <label for="search">Search</label>
-                    <input type="text" id="search" name="search" 
-                           placeholder="Name, email or phone"
-                           value="<?php echo htmlspecialchars($search); ?>">
+                    <input type="text" id="search" name="search"
+                        placeholder="Name, email or phone"
+                        value="<?php echo htmlspecialchars($search); ?>">
                 </div>
                 <div class="filter-group">
                     <label for="event">Event</label>
                     <select id="event" name="event">
                         <option value="">All Events</option>
                         <?php while ($event = $events_result->fetch_assoc()): ?>
-                            <option value="<?php echo htmlspecialchars($event['event_title']); ?>"
-                                    <?php echo ($event_filter === $event['event_title']) ? 'selected' : ''; ?>>
+                            <option value="<?php echo htmlspecialchars($event['id']); ?>"
+                                <?php echo ($event_filter == $event['id']) ? 'selected' : ''; ?>>
                                 <?php echo htmlspecialchars($event['event_title']); ?>
                             </option>
+
                         <?php endwhile; ?>
                     </select>
                 </div>
@@ -295,4 +293,5 @@ $events_result = $events_stmt->get_result();
         </div>
     </div>
 </body>
+
 </html>
