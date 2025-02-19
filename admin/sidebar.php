@@ -71,7 +71,7 @@
         }
 
         .calendar {
-            margin-top: 230px;
+            margin-top: 200px;
             padding: 20px;
             background-color: #2a2679;
             border-radius: 10px;

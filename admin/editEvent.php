@@ -9,9 +9,7 @@ if (!isset($_GET['id'])) {
 
 $eventId = $conn->real_escape_string($_GET['id']);
 
-// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Escape user inputs
     $title = $conn->real_escape_string($_POST['event_title']);
     $venue = $conn->real_escape_string($_POST['event_venue']);
     $location = $conn->real_escape_string($_POST['event_location']);
@@ -24,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $organizerContact = $conn->real_escape_string($_POST['organizer_contact']);
     $eventFee = $conn->real_escape_string($_POST['event_fee']);
 
-    // Handle image upload if a new image is selected
+    //image upload 
     $imageUpdate = "";
     if (isset($_FILES['event_image']) && $_FILES['event_image']['error'] === 0) {
         $targetDir = "../assets/uploads/";
@@ -63,7 +61,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             WHERE id = '$eventId'";
 
     if ($conn->query($sql)) {
-        header('Location: manageEvents.php?message=Event updated successfully');
+        $_SESSION['success_message'] = "Event updated successfully!";
+        header("Location: manageEvents.php");
         exit();
     } else {
         $error = "Error updating event: " . $conn->error;
@@ -183,6 +182,23 @@ $event = $result->fetch_assoc();
             max-width: 200px;
             margin: 10px 0;
         }
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #2e865f;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+
     </style>
 </head>
 
@@ -196,7 +212,7 @@ $event = $result->fetch_assoc();
 
         <div class="form-container">
             <?php if (isset($error)): ?>
-                <div class="error"><?php echo $error; ?></div>
+                <div class="error-message"><?php echo $error; ?></div>
             <?php endif; ?>
 
             <form method="POST" enctype="multipart/form-data">

@@ -168,7 +168,7 @@ $popularEvents = $conn->query("
                 datasets: [{
                     label: 'Number of Events',
                     data: monthlyData.data,
-                    borderColor: 'rgb(75, 192, 192)',
+                    borderColor: 'rgb(104, 92, 175)',
                     tension: 0.1
                 }]
             }
@@ -192,8 +192,8 @@ $popularEvents = $conn->query("
                 datasets: [{
                     label: 'Number of Participants',
                     data: popularData.data,
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgb(104, 92, 175,0.2)',
+                    borderColor: 'rgb(104, 92, 175)',
                     borderWidth: 1
                 }]
             }
