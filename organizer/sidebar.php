@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -43,7 +44,7 @@
             transition: background 0.3s;
         }
 
- 
+
         .menu-item:hover {
             background-color: rgb(75, 64, 141);
         }
@@ -51,7 +52,7 @@
         .menu-item.active {
             background-color: rgb(81, 64, 179);
         }
-        
+
 
         .menu-item img {
             width: 24px;
@@ -62,6 +63,9 @@
         .menu-item a {
             color: white;
             text-decoration: none;
+            display: block;
+            width: 100%;
+            height: 100%;
         }
 
 
@@ -88,15 +92,16 @@
             font-size: 14px;
             color: #ddd;
         }
-</style>
+    </style>
 </head>
+
 <body>
 
-<div class="sidebar">
+    <div class="sidebar">
         <h2>EMS</h2>
         <?php
-$current_page = basename($_SERVER['PHP_SELF']);
-?>
+        $current_page = basename($_SERVER['PHP_SELF']);
+        ?>
         <div class="menu-item <?php echo $current_page == 'dashboard.php' ? 'active' : ''; ?>">
             <a href="dashboard.php">
                 <i class="fas fa-tachometer-alt"></i>
@@ -133,17 +138,17 @@ $current_page = basename($_SERVER['PHP_SELF']);
         </div>
     </div>
 </body>
-<script>        
-function updateCalendar() {
-            const options = {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            };
-            const today = new Date().toLocaleDateString('en-US', options);
-            document.getElementById('currentDate').innerText = today;
-        }
-        updateCalendar();
+<script>
+    function updateCalendar() {
+        const options = {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        };
+        const today = new Date().toLocaleDateString('en-US', options);
+        document.getElementById('currentDate').innerText = today;
+    }
+    updateCalendar();
 </script>
-</html>
 
+</html>

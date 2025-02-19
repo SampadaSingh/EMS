@@ -41,6 +41,7 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s;
+
         }
 
         .menu-item:hover {
@@ -64,6 +65,9 @@
         .menu-item a {
             color: white;
             text-decoration: none;
+            display: block;
+            width: 100%;
+            height: 100%;
         }
 
         .calendar {
@@ -99,29 +103,42 @@
         $current_page = basename($_SERVER['PHP_SELF']);
         ?>
         <div class="menu-item <?php echo $current_page == 'dashboard.php' ? 'active' : ''; ?>">
-            <img src="https://img.icons8.com/ios-glyphs/30/ffffff/dashboard.png" alt="Dashboard">
-            <span><a href="dashboard.php">Dashboard</a></span>
+            <a href="dashboard.php">
+                <img src="https://img.icons8.com/ios-glyphs/30/ffffff/dashboard.png" alt="Dashboard">
+                <span>Dashboard</span>
+            </a>
         </div>
         <div class="menu-item <?php echo $current_page == 'users.php' ? 'active' : ''; ?>">
-            <img src="https://img.icons8.com/ios-glyphs/30/ffffff/conference.png" alt="Users">
-            <span><a href="manageUsers.php">Manage Users</a></span>
+            <a href="manageUsers.php">
+                <img src="https://img.icons8.com/ios-glyphs/30/ffffff/conference.png" alt="Users">
+                <span>Manage Users</span>
+            </a>
         </div>
         <div class="menu-item <?php echo $current_page == 'events.php' ? 'active' : ''; ?>">
-            <img src="https://img.icons8.com/ios-glyphs/30/ffffff/calendar.png" alt="Events">
-            <span><a href="manageEvents.php">Manage Events</a></span>
+            <a href="manageEvents.php">
+                <img src="https://img.icons8.com/ios-glyphs/30/ffffff/calendar.png" alt="Events">
+                <span>Manage Events</span>
+            </a>
         </div>
         <div class="menu-item <?php echo $current_page == 'reports.php' ? 'active' : ''; ?>">
-            <img src="https://img.icons8.com/ios-glyphs/30/ffffff/report-card.png" alt="Reports">
-            <span><a href="reports.php">Reports</a></span>
+            <a href="reports.php">
+                <img src="https://img.icons8.com/ios-glyphs/30/ffffff/report-card.png" alt="Reports">
+                <span>Reports</span>
+            </a>
         </div>
         <div class="menu-item <?php echo $current_page == 'settings.php' ? 'active' : ''; ?>">
-            <img src="https://img.icons8.com/ios-glyphs/30/ffffff/settings.png" alt="Settings">
-            <span><a href="settings.php">Settings</a></span>
+            <a href="settings.php">
+                <img src="https://img.icons8.com/ios-glyphs/30/ffffff/settings.png" alt="Settings">
+                <span>Settings</span>
+            </a>
         </div>
         <div class="menu-item <?php echo $current_page == 'logout.php' ? 'active' : ''; ?>">
-            <img src="https://img.icons8.com/ios-glyphs/30/ffffff/logout-rounded.png" alt="Logout">
-            <span><a href="../php/logout.php">Logout</a></span>
+            <a href="../php/logout.php">
+                <img src="https://img.icons8.com/ios-glyphs/30/ffffff/logout-rounded.png" alt="Logout">
+                <span>Logout</span>
+            </a>
         </div>
+
         <div class="calendar">
             <h3>Calendar</h3>
             <p id="currentDate"></p>
