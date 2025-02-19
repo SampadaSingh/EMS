@@ -180,6 +180,22 @@ $result = $stmt->get_result();
             background: #2c2975;
         }
 
+        .details-button {
+            display: inline-block;
+            padding:  10px 20px;
+            background-color: #47338f;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 15px;
+            transition: background-color 0.3s;
+        }
+
+        .details-button:hover {
+            background-color: #372670;
+        }
+
+
         .no-events {
             text-align: center;
             padding: 40px;
@@ -252,6 +268,7 @@ $result = $stmt->get_result();
                                 <a href="registerEvent.php?id=<?php echo $event['id']; ?>" class="register-btn">
                                     Register Now
                                 </a>
+                                <a href="eventDetails.php?id=<?php echo $event['id']; ?>" class="details-button">View Details</a>
                             </div>
                         </div>
                     <?php endwhile; ?>

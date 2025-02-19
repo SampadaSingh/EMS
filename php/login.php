@@ -44,9 +44,11 @@ include '../config/connect.php';
                 exit();
             } else {
                 $error = "Invalid password";
+                echo "<script>alert('Incorrect email or password.');</script>";
             }
         } else {
             $error = "Email not found";
+            echo "<script>alert('Incorrect email or password.');</script>";
         }
     }
     ?>
