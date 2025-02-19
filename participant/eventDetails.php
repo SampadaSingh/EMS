@@ -269,7 +269,7 @@ $total_registrations = $total_stmt->get_result()->fetch_assoc()['total'];
 
                     <div class="action-buttons">
                         <?php if (!$is_registered && strtotime($event['start_date']) > time()): ?>
-                            <a href="register_event.php?id=<?php echo $event['id']; ?>" class="register-btn">
+                            <a href="registerEvent.php?id=<?php echo $event['id']; ?>" class="register-btn">
                                 Register Now
                             </a>
                         <?php elseif ($is_registered): ?>
