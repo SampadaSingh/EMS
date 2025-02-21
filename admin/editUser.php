@@ -26,8 +26,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sql = "UPDATE users SET username = '$username', email = '$email', role = '$role'";
         
         if (!empty($_POST['password'])) {
-            if (strlen($_POST['password']) < 6) {
-                $_SESSION['error_message'] = "Password must be at least 6 characters long";
+            if (strlen($_POST['password']) < 8) {
+                $_SESSION['error_message'] = "Password must be at least 8 characters long";
             } else {
                 $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
                 $sql .= ", password = '$password'";

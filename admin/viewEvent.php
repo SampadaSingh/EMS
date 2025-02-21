@@ -10,7 +10,6 @@ if (!isset($_GET['id'])) {
 
 $event_id = $_GET['id'];
 
-// Get event details
 $event_query = "SELECT * FROM events WHERE id = ?";
 $stmt = $conn->prepare($event_query);
 $stmt->bind_param('i', $event_id);

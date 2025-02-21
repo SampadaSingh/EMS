@@ -11,7 +11,6 @@ body {
     height: 100vh;
 }
 
-/* Sidebar */
 .sidebar {
     width: 270px;
     background-color: #17153B;
@@ -36,7 +35,6 @@ a {
     color: white;
 }
 
-/* Menu Items */
 .menu-item {
     display: flex;
     align-items: center;
@@ -54,7 +52,6 @@ a {
     opacity: 0.8;
 }
 
-/* Calendar */
 .calendar {
     background-color: #2a2679;
     border-radius: 12px;
@@ -64,14 +61,12 @@ a {
     margin-top: auto;
 }
 
-/* Main Content */
 .content {
     flex-grow: 1;
     margin-left: 300px;
     padding: 40px;
 }
 
-/* Header */
 .header {
     display: flex;
     justify-content: space-between;
@@ -79,7 +74,6 @@ a {
     margin-bottom: 30px;
 }
 
-/* Search Bar */
 .search-container {
     display: flex;
     align-items: center;
@@ -112,7 +106,6 @@ a {
     transform: scale(1.05);
 }
 
-/* Statistics */
 .stats {
     display: flex;
     gap: 30px;
@@ -133,7 +126,6 @@ a {
     margin-bottom: 10px;
 }
 
-/* Upcoming Events */
 .upcoming-events {
     background-color: #fff;
     padding: 20px;
@@ -152,7 +144,6 @@ a {
     border-bottom: none;
 }
 
-/* Event Details Button */
 button.event-details {
     padding: 10px 20px;
     background-color: #2e236c;
