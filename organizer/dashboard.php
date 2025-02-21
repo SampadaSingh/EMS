@@ -36,6 +36,16 @@ $participants_stmt->execute();
 $participants_result = $participants_stmt->get_result();
 $total_participants = $participants_result->fetch_assoc()['total_participants'];
 
+//ongoing events
+$ongoing_query = "SELECT * FROM events 
+                 WHERE organizer_id = ? 
+                 AND start_date <= CURDATE() 
+                 AND end_date >= CURDATE()";
+$ongoing_stmt = $conn->prepare($ongoing_query);
+$ongoing_stmt->bind_param("i", $organizer_id);
+$ongoing_stmt->execute();
+$ongoing_result = $ongoing_stmt->get_result();
+
 //upcoming events
 $upcoming_query = "SELECT * FROM events 
                   WHERE organizer_id = ? 
@@ -124,6 +134,13 @@ $recent_result = $recent_stmt->get_result();
             margin-bottom: 10px;
         }
 
+        .ongoing-events {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
         .upcoming-events {
             background: white;
             padding: 20px;
@@ -138,7 +155,7 @@ $recent_result = $recent_stmt->get_result();
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             margin-top: 20px;
         }
-        .upcoming-events h2, .recent-events h2 {
+        .ongoing-events h2, .upcoming-events h2, .recent-events h2 {
             margin-bottom: 20px;
             color: #17153B;
         }
@@ -190,6 +207,22 @@ $recent_result = $recent_stmt->get_result();
                 <h3><?php echo $total_participants; ?></h3>
                 <p>Total Participants</p>
             </div>
+        </div>
+
+        <div class = "ongoing-events">
+            <h2>Your Ongoing Events</h2>
+            <?php if ($ongoing_result->num_rows > 0): ?>
+                <?php while ($event = $ongoing_result->fetch_assoc()): ?>
+                    <div class="event">
+                        <div>
+                            <p><strong><?php echo htmlspecialchars($event['event_title']); ?></strong></p>
+                            <p>Date: <?php echo date('F j, Y', strtotime($event['start_date'])); ?></p>
+                        </div>
+                    </div>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <p>No ongoing events</p>
+            <?php endif; ?>
         </div>
 
         <div class="upcoming-events">

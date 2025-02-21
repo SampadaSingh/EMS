@@ -2,13 +2,11 @@
 include '../config/connect.php';
 session_start();
 
-// Check if user is logged in and is a participant
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'participant') {
     header('Location: ../php/login.php');
     exit();
 }
 
-// Get event ID from URL
 if (!isset($_GET['id'])) {
     header('Location: events.php');
     exit();
@@ -17,7 +15,6 @@ if (!isset($_GET['id'])) {
 $event_id = $_GET['id'];
 $participant_email = $_SESSION['email'];
 
-// Get event details
 $event_query = "SELECT * FROM events WHERE id = ?";
 $stmt = $conn->prepare($event_query);
 $stmt->bind_param('i', $event_id);
@@ -167,7 +164,7 @@ $total_registrations = $total_stmt->get_result()->fetch_assoc()['total'];
         }
 
         .register-btn.disabled {
-            background-color: #ccc;
+            background-color: rgb(74, 76, 77);
             cursor: not-allowed;
         }
 

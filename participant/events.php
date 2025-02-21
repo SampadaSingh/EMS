@@ -180,9 +180,13 @@ $result = $stmt->get_result();
             background: #2c2975;
         }
 
+        .register-btn.disabled {
+            background-color:rgb(74, 76, 77);
+            cursor: not-allowed;
+        }
         .details-button {
             display: inline-block;
-            padding:  10px 20px;
+            padding: 10px 20px;
             background-color: #47338f;
             color: white;
             text-decoration: none;
@@ -265,9 +269,14 @@ $result = $stmt->get_result();
                                     <i class="fas fa-money-bill"></i>
                                     Rs. <?php echo number_format($event['event_fee'], 2); ?>
                                 </p>
-                                <a href="registerEvent.php?id=<?php echo $event['id']; ?>" class="register-btn">
-                                    Register Now
-                                </a>
+
+                                <?php if (strtotime($event['start_date']) > time()): ?>
+                                    <a href="registerEvent.php?id=<?php echo $event['id']; ?>" class="register-btn">
+                                        Register Now
+                                    </a>
+                                <?php else: ?>
+                                    <a href="#" class="register-btn disabled">Registration Closed</a>
+                                <?php endif; ?>
                                 <a href="eventDetails.php?id=<?php echo $event['id']; ?>" class="details-button">View Details</a>
                             </div>
                         </div>
