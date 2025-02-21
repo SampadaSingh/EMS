@@ -81,12 +81,6 @@ include '../config/connect.php';
                         </div>
                     </div>
 
-                    <!--<div class="rectangle-parent">
-                        <div class="forgot-password">
-                            <a href="">Forgot Password?</a>
-                        </div>
-                    </div>
-                    -->
                     <div class="rectangle-group" id="groupContainer2">
                         <button type="submit" class="login-btn" id="login-btn">Login</button>
                     </div>
