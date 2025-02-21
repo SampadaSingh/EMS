@@ -59,7 +59,6 @@ try {
             }
 
             if (empty($error_message)) {
-                // Update event in database
                 $query = "UPDATE events SET 
                     event_title = ?, event_venue = ?, event_location = ?,
                     start_time = ?, end_time = ?, start_date = ?, end_date = ?,
@@ -305,7 +304,7 @@ try {
             <div class="form-grid">
                 <div class="form-group">
                     <label for="event_title">Event Title*</label>
-                    <input type="text" id="event_title" name="event_title" value="<?php echo htmlspecialchars($event['event_title']); ?>"pattern="[A-Za-z0-9\s'-:]+" title="Only letters, numbers, spaces, hyphens, apostrophes, and colons allowed" required>
+                    <input type="text" id="event_title" name="event_title" value="<?php echo htmlspecialchars($event['event_title']); ?>" pattern="[A-Za-z0-9\s'-:]+" title="Only letters, numbers, spaces, hyphens, apostrophes, and colons allowed" required>
                 </div>
 
                 <div class="form-group">
@@ -379,6 +378,113 @@ try {
     </div>
 
     <script>
+        function validateTitle() {
+            const title = document.getElementById('event_title').value.trim();
+            if (title.length < 2 || title.length > 100) {
+                alert('Enter a valid title');
+                return false;
+            }
+            return true;
+        }
+
+        function validateDate() {
+            const startDate = document.getElementById('start_date').value;
+            const endDate = document.getElementById('end_date').value;
+            const today = new Date();
+
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+
+            if (start < today || end < today) {
+                alert('Invalid Date');
+                return false;
+            }
+
+            if (end < start) {
+                alert('Invalid Date');
+                return false;
+            }
+            return true;
+        }
+
+        function validateTime() {
+            const startTime = document.getElementById('start_time').value;
+            const endTime = document.getElementById('end_time').value;
+
+            if (startTime && endTime) {
+                const start = new Date(`1970-01-01T${startTime}:00`);
+                const end = new Date(`1970-01-01T${endTime}:00`);
+                if (end <= start) {
+
+                    alert('End Time must be after Start Time');
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function validateFee() {
+            const fee = document.getElementById('event_fee').value.trim();
+            if (isNaN(fee) || Number(fee) < 0) {
+                alert('Invalid Fee: Please enter a valid fee.');
+                return false;
+            }
+            return true;
+        }
+
+        function validateName() {
+            const name = document.getElementById('organizer_name').value.trim();
+
+            if (!name) {
+                alert('Name cannot be empty');
+                return false;
+            }
+
+            if (!/^[a-zA-Z\s'-]+$/.test(name)) {
+                alert('Invalid Name: Only letters and spaces are allowed.');
+                return false;
+            }
+            return true;
+        }
+
+
+        function validateContact() {
+            const contact = document.getElementById('organizer_contact').value;
+            if (isNaN(contact) || contact.length !== 10) {
+                alert('Invalid Contact');
+                return false;
+            }
+            return true;
+        }
+
+        function validateForm() {
+            return (
+                validateTitle() &&
+                validateFee() &&
+                validateDate() &&
+                validateTime() &&
+                validateName() &&
+                validateContact()
+            );
+        }
+
+        function handleSubmit(event) {
+            if (!validateForm()) {
+                event.preventDefault();
+            }
+        };
+
+        window.onload = function() {
+            const form = document.querySelector('.event-form');
+            form.addEventListener('submit', handleSubmit);
+            form.addEventListener('keypress', preventEnterSubmit);
+        };
+
+        function preventEnterSubmit(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+            }
+        }
         document.getElementById('start_date').addEventListener('change', function() {
             document.getElementById('end_date').min = this.value;
         });
